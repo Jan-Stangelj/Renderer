@@ -14,9 +14,10 @@ namespace Renderer {
         GLenum type;
         GLboolean normalized;
         GLsizei stride;
+        void* pointer;
 
-        vertexAttribute(GLuint idx, GLint s, GLenum t, GLboolean n, GLsizei str)
-        : index(idx), size(s), type(t), normalized(n), stride(str) {}
+        vertexAttribute(GLuint Index, GLint Size, GLenum Type, GLboolean Normalized, GLsizei Stride, void* Pointer)
+        : index(Index), size(Size), type(Type), normalized(Normalized), stride(Stride), pointer(Pointer) {}
     };
 
     class VAO {
@@ -30,5 +31,7 @@ namespace Renderer {
         void unbind();
     private:
         GLuint ID;
+
+        unsigned int attribute_counter = 0;
     };
 }

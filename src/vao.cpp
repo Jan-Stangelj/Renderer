@@ -10,8 +10,9 @@ Renderer::VAO::~VAO() {
 }
 
 void Renderer::VAO::addAttribute(const vertexAttribute &Attribute) {
-    glVertexAttribPointer(Attribute.index, Attribute.size, Attribute.type, Attribute.normalized, Attribute.stride, (void*)0); // index size type normalized stride (void*)0
-    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(Attribute.index, Attribute.size, Attribute.type, Attribute.normalized, Attribute.stride, Attribute.pointer); // index size type normalized stride (void*)0
+    glEnableVertexAttribArray(attribute_counter);
+    attribute_counter++;
 }
 
 void Renderer::VAO::bind() {
