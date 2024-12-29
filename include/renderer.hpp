@@ -21,6 +21,8 @@ namespace Renderer{
 
         GLFWwindow* getGlfwWindow();
 
+        float deltaTime() { return dTime; };
+
     private:
 
         GLFWwindow* window;
@@ -29,6 +31,8 @@ namespace Renderer{
         unsigned int height;
         bool vsync;
         std::string title;
+
+        float dTime;
 
     };
 }

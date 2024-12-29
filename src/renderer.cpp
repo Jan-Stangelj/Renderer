@@ -27,6 +27,8 @@ Renderer::Window::Window(unsigned int Width, unsigned int Height, std::string Ti
         return;
     }
 
+    glEnable(GL_DEPTH_TEST);
+
     width = Width;
     height = Height;
     title = Title;
@@ -41,12 +43,14 @@ bool Renderer::Window::shouldWindowClose(){
 }
 
 void Renderer::Window::clear(glm::vec4 Color){
+    glfwSetTime(0);
     glClearColor(Color.r, Color.g, Color.b, Color.a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 void Renderer::Window::swapBuffers(){
     glfwPollEvents();
     glfwSwapBuffers(window);
+    dTime = glfwGetTime();
 }
 
 GLFWwindow* Renderer::Window::getGlfwWindow(){
