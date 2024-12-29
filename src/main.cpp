@@ -14,8 +14,8 @@ int main(){
     Renderer::Window window(1920, 1080, "OpenGL", true);
 
     float vertices[] = {
-         0.5f,  0.5f, 0.0f, 1.77f, 1.0f,  // top right
-         0.5f, -0.5f, 0.0f, 1.77f, 0.0f,  // bottom right
+         0.5f,  0.5f, 0.0f, 1.0f, 1.0f,  // top right
+         0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // bottom right
         -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, // bottom left
         -0.5f,  0.5f, 0.0f, 0.0f, 1.0f ,  // top left 
     };
@@ -35,9 +35,13 @@ int main(){
     Renderer::Shader shader("../src/shaders/basic.vert", "../src/shaders/basic.frag");
 
     Renderer::Texture texture("../assets/textures/red_brick.jpg", 0, shader, "texture1", 3);
+    Renderer::Texture texture2("../assets/textures/awesomeface.png", 1, shader, "texture2", 4);
 
     while (!window.shouldWindowClose()){
         window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+
+        texture.Bind(0, shader, "texture1");
+        texture2.Bind(1, shader, "texture2");
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         
