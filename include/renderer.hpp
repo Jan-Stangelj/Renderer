@@ -22,6 +22,7 @@ namespace Renderer{
         GLFWwindow* getGlfwWindow();
 
         float deltaTime() { return dTime; };
+        glm::vec2 resolution() { return glm::vec2(width, height); }
 
     private:
 

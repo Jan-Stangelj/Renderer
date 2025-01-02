@@ -1,6 +1,6 @@
 #include "camera.hpp"
 
-Renderer::Camera::Camera(float fovY, float aspectRatio, float viewDistanceMin, float viewDistanceMax, Renderer::Shader Shader) 
+Renderer::Camera::Camera(float fovY, float aspectRatio, float viewDistanceMin, float viewDistanceMax, Renderer::Shader &Shader) 
     : fov(fovY), aspectR(aspectRatio), VDmin(viewDistanceMin), VDmax(viewDistanceMax), shader(Shader) {
 
     view = glm::translate(glm::mat4(1.0f), position);
@@ -66,7 +66,7 @@ void Renderer::Camera::cameraRotation(float mouseSensetivity, float xpos, float 
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+    float yoffset = lastY - ypos;
     lastX = xpos;
     lastY = ypos;
 
@@ -76,7 +76,6 @@ void Renderer::Camera::cameraRotation(float mouseSensetivity, float xpos, float 
     yaw += xoffset;
     pitch += yoffset;
 
-    // make sure that when pitch is out of bounds, screen doesn't get flipped
     if (pitch > 89.0f)
         pitch = 89.0f;
     if (pitch < -89.0f)

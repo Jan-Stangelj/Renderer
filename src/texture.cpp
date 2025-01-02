@@ -6,7 +6,7 @@
 #include <iostream>
 #include <unordered_map>
 
-Renderer::Texture::Texture(std::string file, unsigned int textureUint, Renderer::Shader &shader, std::string textureUniform, unsigned int colorChannels) {
+Renderer::Texture::Texture(std::string file, unsigned int colorChannels) {
 
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
@@ -21,7 +21,7 @@ Renderer::Texture::Texture(std::string file, unsigned int textureUint, Renderer:
     stbi_set_flip_vertically_on_load(true);  
     unsigned char *data = stbi_load(file.c_str(), &width, &height, &nrChannels, 0);
 
-    const GLenum lookup2[] = {0, 0, GL_RG, GL_RGB, GL_RGBA};
+    const GLenum lookup2[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
 
     if (data)
     {
