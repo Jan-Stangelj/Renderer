@@ -9,4 +9,4 @@ Not much to say currently, but I'll add more later.
 
 ### Compilation (Non linux)
 You should be able to clone this project and use cmake GUI to compile it
-for your platform of choice(ex. Visual Studio).
+for your platform of choice (eg. Visual Studio).
