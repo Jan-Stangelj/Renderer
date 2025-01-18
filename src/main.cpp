@@ -83,12 +83,12 @@ int main(){
     VAO.addAttribute(Renderer::vertexAttribute(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
 
     // Textures, materials and lights
-    Renderer::Texture texture("../assets/textures/red_brick_diff_4k.jpg", 3);
-    Renderer::Texture texture2("../assets/textures/red_brick_spec_1k.jpg", 1);
-    Renderer::Texture texture3("../assets/textures/red_brick_ao_1k.jpg", 1);
+    Renderer::Texture texture("../assets/textures/red_brick_diff_4k.jpg", 3, false);
+    Renderer::Texture texture2("../assets/textures/red_brick_spec_1k.jpg", 1, true);
+    Renderer::Texture texture3("../assets/textures/red_brick_ao_1k.jpg", 1, true);
     Renderer::setMaterial(shader, texture, texture2, texture3, 16.0f);
 
-    Renderer::Light light(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(1.0f), 20.0f, 0.15f);
+    Renderer::Light light(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(1.0f), 5.0f, 0.05f);
     Renderer::setLight(shader, light);
 
 

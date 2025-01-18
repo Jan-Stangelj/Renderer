@@ -6,7 +6,7 @@
 #include <iostream>
 #include <unordered_map>
 
-Renderer::Texture::Texture(std::string file, unsigned int colorChannels) {
+Renderer::Texture::Texture(std::string file, unsigned int colorChannels, bool linearColorSpace) {
 
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
@@ -25,7 +25,7 @@ Renderer::Texture::Texture(std::string file, unsigned int colorChannels) {
 
     if (data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, lookup2[colorChannels], GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, ((linearColorSpace==1)*GL_RGB)+((linearColorSpace==0&&colorChannels!=4)*GL_SRGB)+((linearColorSpace==0&&colorChannels==4)*GL_SRGB_ALPHA), width, height, 0, lookup2[colorChannels], GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
