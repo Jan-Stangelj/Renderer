@@ -86,17 +86,17 @@ int main(){
     Renderer::Texture texture("../assets/textures/red_brick_diff_1k.jpg", 3, false);
     Renderer::Texture texture2("../assets/textures/red_brick_spec_1k.jpg", 1, true);
     Renderer::Texture texture3("../assets/textures/red_brick_ao_1k.jpg", 1, true);
-    Renderer::Material mat(shader, texture, texture2, texture3, 16.0f);
+    Renderer::Material mat(shader, texture, texture2, texture3, 64.0f);
     Renderer::setMaterial(mat);
 
-    Renderer::PointLight light(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(1.0f, 0.8f, 0.8f), 10.0f, 0.05f);
+    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 3.0f, 0.05f);
     Renderer::setLight(shader, light, 0);
 
-    Renderer::DirectionLight dirlight(-glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), 3.0f, 0.05f);
+    Renderer::DirectionLight dirlight(-glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), 1.0f, 0.05f);
     Renderer::setLight(shader, dirlight, 0);
 
     shader.setInt("numPointLights",1);
-    shader.setInt("numDirLights", 1);
+    shader.setInt("numDirLights", 0);
 
 
     // Camera
@@ -114,7 +114,8 @@ int main(){
         shader.setVec3("camPos", cam.getPosition());
 
         // Object translation
-        glm::mat4 trans = glm::mat4(1.0f);
+        glm::mat4 trans(1.0f);
+        trans = glm::scale(trans, glm::vec3(5.0f, 0.5f, 5.0f));
         shader.use();
         shader.setMat4("model", trans);
         glDrawArrays(GL_TRIANGLES, 0, 36);
