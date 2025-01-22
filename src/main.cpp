@@ -30,7 +30,7 @@ int main(){
     Renderer::Shader shader("../src/shaders/basic.vert", "../src/shaders/basic.frag");
     shader.use();
 
-    float vertices[] = {
+    float cube[] = {
         // positions          // normals           // texture coords
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
@@ -77,19 +77,26 @@ int main(){
     
     // Mesh
     Renderer::VAO VAO;
-    Renderer::VBO VBO(vertices, sizeof(vertices));
+    Renderer::VBO VBO(cube, sizeof(cube));
     VAO.addAttribute(Renderer::vertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
     VAO.addAttribute(Renderer::vertexAttribute(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
     VAO.addAttribute(Renderer::vertexAttribute(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
 
     // Textures, materials and lights
-    Renderer::Texture texture("../assets/textures/red_brick_diff_4k.jpg", 3, false);
+    Renderer::Texture texture("../assets/textures/red_brick_diff_1k.jpg", 3, false);
     Renderer::Texture texture2("../assets/textures/red_brick_spec_1k.jpg", 1, true);
     Renderer::Texture texture3("../assets/textures/red_brick_ao_1k.jpg", 1, true);
-    Renderer::setMaterial(shader, texture, texture2, texture3, 16.0f);
+    Renderer::Material mat(shader, texture, texture2, texture3, 16.0f);
+    Renderer::setMaterial(mat);
 
-    Renderer::Light light(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(1.0f), 5.0f, 0.05f);
-    Renderer::setLight(shader, light);
+    Renderer::PointLight light(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(1.0f, 0.8f, 0.8f), 10.0f, 0.05f);
+    Renderer::setLight(shader, light, 0);
+
+    Renderer::DirectionLight dirlight(-glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), 3.0f, 0.05f);
+    Renderer::setLight(shader, dirlight, 0);
+
+    shader.setInt("numPointLights",1);
+    shader.setInt("numDirLights", 1);
 
 
     // Camera
@@ -108,7 +115,7 @@ int main(){
 
         // Object translation
         glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        shader.use();
         shader.setMat4("model", trans);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 

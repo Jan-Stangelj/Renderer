@@ -2,6 +2,7 @@
 
 #include <texture.hpp>
 #include <shader.hpp>
+#include <string>
 
 namespace Renderer {
     struct Material {
@@ -18,39 +19,35 @@ namespace Renderer {
           AO(ao), 
           Smoothnes(smoothness) {}
     };
+    void setMaterial(Renderer::Material &Material);
 
-    void setMaterial(Renderer::Shader &Shader, Renderer::Texture &Diffuse, Renderer::Texture &Specular, Renderer::Texture &AO, float Smoothnes) {
-        Diffuse.Bind(0, Shader, "mat.diffuse");
-        Specular.Bind(1, Shader, "mat.specular");
-        AO.Bind(2, Shader, "mat.ambientOcclusion");
-        Shader.setFloat("mat.smoothnes", Smoothnes);
-    }
+    struct PointLight {
 
-    void setMaterial(Renderer::Material Material) {
-        Material.Diffuse.Bind(0, Material.Shader, "mat.diffuse");
-        Material.Specular.Bind(1, Material.Shader, "mat.specular");
-        Material.AO.Bind(2, Material.Shader, "mat.ambientOcclusion");
-        Material.Shader.setFloat("mat.smoothnes", Material.Smoothnes);
-    }
-
-    struct Light {
         glm::vec3 Position;
         glm::vec3 Color;
         float Strength;
         float Ambient;
 
-        Light(glm::vec3 position, glm::vec3 color, float strength, float ambient)
+        PointLight(glm::vec3 position, glm::vec3 color, float strength, float ambient)
         : Position(position), 
           Color(color), 
           Strength(strength), 
           Ambient(ambient) {}
     };
 
-    void setLight(Renderer::Shader &Shader, Renderer::Light &light) {
-        Shader.setVec3("light.position", light.Position);
-        Shader.setVec3("light.color", light.Color);
-        Shader.setFloat("light.strenght", light.Strength);
-        Shader.setFloat("light.ambient", light.Ambient);
-    }
-    
+    struct DirectionLight {
+
+        glm::vec3 Direction;
+        glm::vec3 Color;
+        float Intensity;
+        float Ambient;
+
+        DirectionLight(glm::vec3 direction, glm::vec3 color, float intensity, float ambient)
+        : Direction(direction), 
+        Color(color), 
+        Intensity(intensity), 
+        Ambient(ambient) {}
+    };
+    void setLight(Renderer::Shader &Shader, Renderer::PointLight &light, int index);
+    void setLight(Renderer::Shader &Shader, Renderer::DirectionLight &light, int index);
 }
