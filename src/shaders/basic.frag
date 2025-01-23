@@ -48,9 +48,6 @@ vec3 calcPointLight(Material mat, PointLight light, vec3 camPos) {
 	float diff = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diff * ((light.color * light.strenght) / pow(distance(light.position, FragPos), 2))  * (texture(mat.diffuse, TexCoord).xyz * texture(mat.ambientOcclusion, TexCoord).xxx);
 
-	//vec3 viewDir = normalize(camPos - FragPos);
-	//vec3 reflectDir = reflect(-lightDir, norm);
-
 	vec3 viewDir    = normalize(camPos - FragPos);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float spec = pow(max(dot(norm, halfwayDir), 0.0), mat.smoothnes);
@@ -68,8 +65,8 @@ vec3 calcDirectionalLight(Material mat, DirectionalLight light, vec3 camPos) {
 	vec3 diffuse = diff * (light.color * light.intensity) * (texture(mat.diffuse, TexCoord).xyz * texture(mat.ambientOcclusion, TexCoord).xxx);
 
 	vec3 viewDir = normalize(camPos - FragPos);
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), mat.smoothnes);
+	vec3 halfwayDir = normalize(lightDir + viewDir);
+	float spec = pow(max(dot(norm, halfwayDir), 0.0), mat.smoothnes);
 	vec3 specular = spec * (light.color * light.intensity) * texture(mat.specular, TexCoord).xxx;  
 
 	return (ambient + diffuse + specular);
