@@ -53,7 +53,7 @@ void Renderer::Camera::cameraMovement(Renderer::Window &Window, float deltaTime,
     if (glfwGetKey(Window.getGlfwWindow(), GLFW_KEY_Q) == GLFW_PRESS)
         addPositionRelative(glm::vec3(0.0f, -1.0f, 0.0f) * deltaTime * cameraSpeed);
     if (glfwGetKey(Window.getGlfwWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwTerminate();
+        glfwSetWindowShouldClose(Window.getGlfwWindow(), true);
 }
 
 void Renderer::Camera::cameraRotation(float mouseSensetivity, float xpos, float ypos) {

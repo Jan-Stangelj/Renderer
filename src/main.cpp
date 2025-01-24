@@ -21,7 +21,7 @@ void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
     mouseY = yposIn;
 }
 
-int main(){
+int main(){ 
     Renderer::Window Window(1920, 1200, "OpenGL", true);
 
     glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
