@@ -17,3 +17,4 @@ for your platform of choice (eg. Visual Studio).
 [GLFW](https://www.glfw.org/)
 [glm](https://github.com/g-truc/glm)
 [stb](https://github.com/g-truc/glm)
+[assimp](https://github.com/assimp/assimp)

@@ -6,6 +6,7 @@
 #include <texture.hpp>
 #include <camera.hpp>
 #include <lighting.hpp>
+#include <material.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

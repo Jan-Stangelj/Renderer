@@ -13,6 +13,7 @@ set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 add_subdirectory(vendor/glad)
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
+add_subdirectory(vendor/assimp)
 
 file(GLOB_RECURSE MY_SOURCES CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_executable("${CMAKE_PROJECT_NAME}")
