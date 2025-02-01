@@ -84,20 +84,19 @@ int main(){
     VAO.addAttribute(Renderer::vertexAttribute(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
 
     // Textures, materials and lights
-    Renderer::Texture texture("../assets/textures/red_brick_diff_1k.jpg", 16, 3, false);
-    Renderer::Texture texture2("../assets/textures/red_brick_spec_1k.jpg", 16, 1, true);
-    Renderer::Texture texture3("../assets/textures/red_brick_ao_1k.jpg", 16, 1, true);
-    Renderer::Material mat(shader, texture, texture2, texture3, 64.0f);
-    Renderer::setMaterial(mat);
+    Renderer::Texture texture("../assets/textures/coast_sand_rocks_02_diff_4k.jpg", 16, 3, false);
+    Renderer::Texture texture2("../assets/textures/coast_sand_rocks_02_arm_4k.jpg", 16, 3, true);
+    Renderer::Material mat(texture, texture2);
+    mat.Bind(shader);
 
-    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 3.0f, 0.05f);
-    Renderer::setLight(shader, light, 0);
+    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 9.0f);
+    light.Bind(shader, 0);
 
-    Renderer::DirectionLight dirlight(-glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), 1.0f, 0.05f);
-    Renderer::setLight(shader, dirlight, 0);
+    Renderer::DirectionLight dirlight(-glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), 5.0f);
+    dirlight.Bind(shader, 0);
 
-    shader.setInt("numPointLights",1);
-    shader.setInt("numDirLights", 0);
+    shader.setInt("numPointLights", 1);
+    shader.setInt("numDirLights", 1);
 
 
     // Camera
@@ -125,3 +124,9 @@ int main(){
     }
     return 0;
 }
+
+// TODO:
+// - zorganiziraj
+// - pravilni normal mapi
+// - depth mapi
+// - self shadowi za depth mappe
