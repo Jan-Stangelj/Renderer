@@ -87,6 +87,8 @@ int main(){
     Renderer::Texture texture("../assets/textures/coast_sand_rocks_02_diff_4k.jpg", 16, 3, false);
     Renderer::Texture texture2("../assets/textures/coast_sand_rocks_02_arm_4k.jpg", 16, 3, true);
     Renderer::Material mat(texture, texture2);
+    //delete &texture;
+    //delete &texture2;
     mat.Bind(shader);
 
     Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 9.0f);

@@ -1,36 +1,42 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec2 TexCoord;
-in vec3 Normal;
-in vec3 FragPos;
+in vec2 texCoord;
+in vec3 normal;
+in vec3 fragPos;
 
 
-struct Material {
-	sampler2D diffuse;
-	sampler2D arm;
-	sampler2D normal;
-	sampler2D depth;
+struct material {
+	sampler2D albedoTxt;
+	sampler2D armTxt;
+	sampler2D normalTxt;
+	sampler2D depthTxt;
+	vec3 albedo;
+	vec3 arm;
+	bool hasAlbedo;
+	bool hasArm;
+	bool hasNormal;
+	bool hasDepth;
 };
 
 
-struct PointLight {
+struct pointLight {
 	vec3 position;
 	vec3 color;
 	float strenght;
 };
 
 
-struct DirectionalLight {
+struct directionalLight {
 	vec3 direction;
 	vec3 color;
 	float intensity;
 };
 
-uniform Material mat;
+uniform material mat;
 
-uniform PointLight pointlight[32];
-uniform DirectionalLight dirlight[4];
+uniform pointLight pointLights[32];
+uniform directionalLight dirLights[4];
 uniform int numPointLights;
 uniform int numDirLights;
 
@@ -71,21 +77,20 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-vec3 calcPointLight(Material mat, PointLight light, vec3 normal) {
-	vec3 albedo = texture(mat.diffuse, TexCoord).rgb;
-	float metallic = texture(mat.arm, TexCoord).z;
-	float roughness = texture(mat.arm, TexCoord).y;
+vec3 calcPointLight(vec3 albedo, vec3 arm, vec3 normal, pointLight light) {
+	float metallic = arm.z;
+	float roughness = arm.y;
 
-    vec3 N = normalize(normal);
-    vec3 V = normalize(camPos - FragPos);
+    vec3 N = normal;
+    vec3 V = normalize(camPos - fragPos);
 
 	vec3 F0 = vec3(0.04); 
     F0 = mix(F0, albedo, metallic);
 
 	// calculate per-light radiance
-	vec3 L = normalize(light.position - FragPos);
+	vec3 L = normalize(light.position - fragPos);
 	vec3 H = normalize(V + L);
-	float distance = length(light.position - FragPos);
+	float distance = length(light.position - fragPos);
 	float attenuation = light.strenght / pow(distance, distance);
 	vec3 radiance = light.color * attenuation;
 
@@ -109,13 +114,12 @@ vec3 calcPointLight(Material mat, PointLight light, vec3 normal) {
 	return (kD * albedo / PI + specular) * radiance * NdotL;
 }
 
-vec3 calcDirectionalLight(Material mat, DirectionalLight light, vec3 normal) {
-	vec3 albedo = texture(mat.diffuse, TexCoord).rgb;
-	float metallic = texture(mat.arm, TexCoord).z;
-	float roughness = texture(mat.arm, TexCoord).y;
+vec3 calcDirectionalLight(vec3 albedo, vec3 arm, vec3 normal, directionalLight light) {
+	float metallic = arm.z;
+	float roughness = arm.y;
 
-    vec3 N = normalize(normal);
-    vec3 V = normalize(camPos - FragPos);
+    vec3 N = normal;
+    vec3 V = normalize(camPos - fragPos);
 
 	vec3 F0 = vec3(0.04); 
     F0 = mix(F0, albedo, metallic);
@@ -147,12 +151,15 @@ vec3 calcDirectionalLight(Material mat, DirectionalLight light, vec3 normal) {
 
 void main() {
 	vec3 resoult = vec3(0.0f);
+	vec3 albedo = texture(mat.albedoTxt, texCoord).xyz;
+	vec3 arm = texture(mat.armTxt, texCoord).xyz;
+
 	for (int i = 0; i < numDirLights; ++i) {
-		resoult += calcDirectionalLight(mat, dirlight[i], Normal);
+		resoult += calcDirectionalLight(albedo, arm, normal, dirLights[i]);
 	}
 	for (int i = 0; i < numPointLights; ++i) {
-		resoult += calcPointLight(mat, pointlight[i], Normal);
+		resoult += calcPointLight(albedo, arm, normal, pointLights[i]);
 	}
-	resoult += vec3(0.03) * texture(mat.diffuse, TexCoord).rgb, texture(mat.arm, TexCoord).xxx;
+	resoult += vec3(0.03) * albedo * arm.x;
 	FragColor.rgb = pow(resoult, vec3(1.0/2.2));
 }
