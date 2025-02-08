@@ -84,14 +84,14 @@ int main(){
     VAO.addAttribute(Renderer::vertexAttribute(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
 
     // Textures, materials and lights
-    Renderer::Texture texture("../assets/textures/coast_sand_rocks_02_diff_4k.jpg", 16, 3, false);
-    Renderer::Texture texture2("../assets/textures/coast_sand_rocks_02_arm_4k.jpg", 16, 3, true);
-    Renderer::Material mat(texture, texture2);
-    //delete &texture;
-    //delete &texture2;
+    Renderer::Texture albedo("../assets/textures/coast_sand_rocks_02_diff_4k.jpg", 16, 3, false);
+    Renderer::Texture arm("../assets/textures/coast_sand_rocks_02_arm_4k.jpg", 16, 3, true);
+    Renderer::Texture normal("../assets/textures/coast_sand_rocks_02_nor_gl_4k.jpg", 16, 3, true);
+    Renderer::Texture depth("../assets/textures/coast_sand_rocks_02_disp_4k.png", 16, 1, true);
+    Renderer::Material mat(albedo, arm, normal, depth);
     mat.Bind(shader);
 
-    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 9.0f);
+    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f, 0.85f, 0.85f), 10.0f);
     light.Bind(shader, 0);
 
     Renderer::DirectionLight dirlight(-glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), 5.0f);

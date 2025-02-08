@@ -84,7 +84,7 @@ vec3 calcPointLight(vec3 albedo, vec3 arm, vec3 normal, pointLight light) {
     vec3 N = normal;
     vec3 V = normalize(camPos - fragPos);
 
-	vec3 F0 = vec3(0.04); 
+	vec3 F0 = vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
 	// calculate per-light radiance
@@ -95,11 +95,11 @@ vec3 calcPointLight(vec3 albedo, vec3 arm, vec3 normal, pointLight light) {
 	vec3 radiance = light.color * attenuation;
 
 	// Cook-Torrance BRDF
-	float NDF = DistributionGGX(N, H, roughness);   
-	float G   = GeometrySmith(N, V, L, roughness);      
+	float NDF = DistributionGGX(N, H, roughness);
+	float G   = GeometrySmith(N, V, L, roughness);
 	vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
 		
-	vec3 numerator    = NDF * G * F; 
+	vec3 numerator    = NDF * G * F;
 	float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001; // + 0.0001 to prevent divide by zero
 	vec3 specular = numerator / denominator;
 	
@@ -107,7 +107,7 @@ vec3 calcPointLight(vec3 albedo, vec3 arm, vec3 normal, pointLight light) {
 	vec3 kS = F;
 	vec3 kD = vec3(1.0) - kS;
 
-	kD *= 1.0 - metallic;	  
+	kD *= 1.0 - metallic;
 
 	// scale light by NdotL
 	float NdotL = max(dot(N, L), 0.0);  
@@ -151,8 +151,8 @@ vec3 calcDirectionalLight(vec3 albedo, vec3 arm, vec3 normal, directionalLight l
 
 void main() {
 	vec3 resoult = vec3(0.0f);
-	vec3 albedo = texture(mat.albedoTxt, texCoord).xyz;
-	vec3 arm = texture(mat.armTxt, texCoord).xyz;
+    vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
+    vec3 arm = mat.hasArm ? texture(mat.armTxt, texCoord).xyz : mat.arm;
 
 	for (int i = 0; i < numDirLights; ++i) {
 		resoult += calcDirectionalLight(albedo, arm, normal, dirLights[i]);
