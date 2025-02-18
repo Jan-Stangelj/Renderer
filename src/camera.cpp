@@ -1,32 +1,26 @@
 #include "camera.hpp"
 
-Renderer::Camera::Camera(float fovY, float aspectRatio, float viewDistanceMin, float viewDistanceMax, Renderer::Shader &Shader) 
-    : fov(fovY), aspectR(aspectRatio), VDmin(viewDistanceMin), VDmax(viewDistanceMax), shader(Shader) {
+Renderer::Camera::Camera(float fovY, float aspectRatio, float viewDistanceMin, float viewDistanceMax) 
+    : fov(fovY), aspectR(aspectRatio), VDmin(viewDistanceMin), VDmax(viewDistanceMax) {
 
     view = glm::translate(glm::mat4(1.0f), position);
     projection = glm::perspective(glm::radians(fovY), aspectRatio, viewDistanceMin, viewDistanceMax);
-
-    Shader.setMat4("view", view);
-    Shader.setMat4("projection", projection);
 }
 
 void Renderer::Camera::setPosition(glm::vec3 Position) {
     position = Position;
     
     view = glm::translate(glm::mat4(1.0f), position);
-    shader.setMat4("view", view);
 }
 void Renderer::Camera::addPositionAbsolute(glm::vec3 Position) {
     position += Position;
 
     view = glm::translate(view, Position);
-    shader.setMat4("view", view);
 }
 void Renderer::Camera::addPositionRelative(glm::vec3 Position) {
     position += (right * Position.x) + (up * Position.y) + (direction * Position.z);
 
     view = glm::translate(view, Position);
-    shader.setMat4("view", view);
 }
 
 void Renderer::Camera::setTarget(glm::vec3 Target) {
@@ -36,7 +30,6 @@ void Renderer::Camera::setTarget(glm::vec3 Target) {
     right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), direction));
     up = glm::cross(direction, right);
     view = glm::lookAt(position, target, up);
-    shader.setMat4("view", view);
 }
 
 void Renderer::Camera::cameraMovement(Renderer::Window &Window, float deltaTime, float cameraSpeed) {
@@ -86,4 +79,10 @@ void Renderer::Camera::cameraRotation(float mouseSensetivity, float xpos, float 
     front.y = sin(glm::radians(pitch));
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     setTarget(position + front);
+}
+
+void Renderer::Camera::applyToShader(Renderer::Shader shader) {
+    shader.setMat4("view", view);
+    shader.setMat4("projection", projection);
+    shader.setVec3("camPos", position);
 }

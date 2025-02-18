@@ -11,7 +11,7 @@
 namespace Renderer {
     class Camera {
     public:
-        Camera(float fovY, float aspectRatio, float viewDistanceMin, float viewDistanceMax, Renderer::Shader &Shader);
+        Camera(float fovY, float aspectRatio, float viewDistanceMin, float viewDistanceMax);
         ~Camera() = default;
 
         void setPosition(glm::vec3 Position);
@@ -23,11 +23,11 @@ namespace Renderer {
         void cameraMovement(Renderer::Window &Window, float deltaTime, float cameraSpeed);
         void cameraRotation(float mouseSensetivity, float xpos, float ypos);
 
+        void applyToShader(Renderer::Shader shader);
+
         glm::vec3 getPosition() { return position; };
 
     private:
-
-        Renderer::Shader shader;
 
         glm::mat4 view;
         glm::mat4 projection;

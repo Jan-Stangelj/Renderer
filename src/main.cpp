@@ -102,7 +102,7 @@ int main(){
 
 
     // Camera
-    Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.01f, 100.0f, shader);
+    Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.01f, 100.0f);
     cam.setPosition(glm::vec3(0.0f, 0.0f, -3.0f));
 
     // Main loop
@@ -112,6 +112,7 @@ int main(){
         // Camera movement calls
         cam.cameraMovement(Window, Window.deltaTime(), 1.0f);
         cam.cameraRotation(0.05f, mouseX, mouseY);
+        cam.applyToShader(shader);
 
         shader.setVec3("camPos", cam.getPosition());
 
