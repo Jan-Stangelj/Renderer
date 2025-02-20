@@ -13,6 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
+#include <vector>
 
 float mouseX;
 float mouseY;
@@ -31,7 +32,7 @@ int main(){
     Renderer::Shader shader("../src/shaders/basic.vert", "../src/shaders/basic.frag");
     shader.use();
 
-    float cube[] = {
+    std::vector<float> cube = {
         // positions          // normals           // texture coords
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
@@ -78,7 +79,7 @@ int main(){
     
     // Mesh
     Renderer::VAO VAO;
-    Renderer::VBO VBO(cube, sizeof(cube));
+    Renderer::VBO VBO(&cube[0], sizeof(float)*cube.size());
     VAO.addAttribute(Renderer::vertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
     VAO.addAttribute(Renderer::vertexAttribute(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
     VAO.addAttribute(Renderer::vertexAttribute(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
