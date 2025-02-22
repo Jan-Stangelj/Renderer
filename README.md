@@ -1,20 +1,25 @@
 ## A simple OpenGL renderer
-Not much to say currently, but I'll add more later.
+I develop this in my spare time.\
+Feature list:
+- Multiple lights
+- Physically based rendering
 
-### Compilation (Linux)
-    git clone https://github.com/Jan-Stangelj/Renderer.git
+### Compilation (GNU/Linux)
+    git clone --recursive https://github.com/Jan-Stangelj/Renderer.git
     cd Renderer
     mkdir build
-    ./build.sh
+    cmake -S . -B build
+    cd build
+    make
 
-### Compilation (Non linux)
+### Compilation (Windows)
 You should be able to clone this project and use cmake GUI to compile it
 for your platform of choice (eg. Visual Studio).
 
 ### Assets and 3rd party liraries
-[PolyHaven](https://polyhaven.com/)
-[Glad](https://glad.dav1d.de/)
-[GLFW](https://www.glfw.org/)
-[glm](https://github.com/g-truc/glm)
-[stb](https://github.com/g-truc/glm)
+[PolyHaven](https://polyhaven.com/)\
+[Glad](https://glad.dav1d.de/)\
+[GLFW](https://www.glfw.org/)\
+[glm](https://github.com/g-truc/glm)\
+[stb](https://github.com/g-truc/glm)\
 [assimp](https://github.com/assimp/assimp)
