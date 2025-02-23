@@ -16,16 +16,19 @@ namespace Renderer {
         glm::vec3 position;
         glm::vec3 normal;
         glm::vec2 texCoord;
+
+        Vertex() = default;
+        Vertex(glm::vec3 position, glm::vec3 normal, glm::vec2 texCoord) : position(position), normal(normal), texCoord(texCoord) {}
     };
 
     class Mesh {
     public:
-        Mesh(const std::vector<Vertex>& vertices, 
-             const std::vector<unsigned int>& indices, 
-             Renderer::Material material);
+        Mesh(const std::vector<Vertex> vertices, 
+             const std::vector<unsigned int> indices,
+             Renderer::Material* mat);
         ~Mesh() = default;
 
-        void draw(Renderer::Shader& shader);
+        void draw(Renderer::Shader shader);
 
     private:
         Renderer::VBO vbo;
@@ -34,6 +37,6 @@ namespace Renderer {
 
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
-        Renderer::Material mat;
+        Renderer::Material* mat;
     };
 }
