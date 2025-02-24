@@ -50,7 +50,7 @@ int main(){
     Renderer::Material mat;
     mat.setAlbedoTexture("../assets/textures/red_brick_diff_4k.jpg");
     mat.setAOTexture("../assets/textures/red_brick_ao_4k.jpg");
-    mat.setRoughnessTexture("../assets/textures/red_brick_roug_4k.jpg");
+    mat.setRoughnessTexture("../assets/textures/red_brick_rough_4k.jpg");
     mat.setMetallic(0.0f);
     mat.Bind(shader);
 

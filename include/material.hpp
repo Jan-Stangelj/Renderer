@@ -13,8 +13,6 @@ namespace Renderer {
         Material(glm::vec3 albedo, float AO, float roughness, float metallic);
         Material() = default;
 
-        ~Material();
-
         void Bind(Renderer::Shader Shader);
 
         void setAlbedo(glm::vec3 albedo);
@@ -30,10 +28,10 @@ namespace Renderer {
     private:
 
         // error if not on heap, i dont fucking know why
-        Renderer::Texture* albedoTxt; 
-        Renderer::Texture* aoTxt; 
-        Renderer::Texture* roughnessTxt; 
-        Renderer::Texture* metallicTxt;
+        Renderer::Texture albedoTxt; 
+        Renderer::Texture aoTxt; 
+        Renderer::Texture roughnessTxt; 
+        Renderer::Texture metallicTxt;
 
         glm::vec3 albedo = glm::vec3(1.0f);
         float AO = 1.0f;

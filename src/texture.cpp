@@ -6,8 +6,14 @@
 #include <iostream>
 #include <unordered_map>
 
-Renderer::Texture::Texture(std::string file, unsigned int antisotrpy, unsigned int colorChannels, bool linearColorSpace) {
+Renderer::Texture::Texture(std::string file, unsigned int colorChannels, bool linearColorSpace) {
+    generate(file, colorChannels, linearColorSpace);
+}
+Renderer::Texture::~Texture() {
+    glDeleteTextures(1, &ID);
+}
 
+void Renderer::Texture::generate(std::string file, unsigned int colorChannels, bool linearColorSpace) {
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
 
@@ -15,7 +21,7 @@ Renderer::Texture::Texture(std::string file, unsigned int antisotrpy, unsigned i
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, antisotrpy);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, 16);
 
     // load and generate the texture
     int width, height, nrChannels;
@@ -34,9 +40,6 @@ Renderer::Texture::Texture(std::string file, unsigned int antisotrpy, unsigned i
         std::cout << "Failed to load texture\n";
     }
     stbi_image_free(data);
-}
-Renderer::Texture::~Texture() {
-    glDeleteTextures(1, &ID);
 }
 
 void Renderer::Texture::Bind(unsigned int textureUnit, Renderer::Shader &shader, std::string textureUniform) {

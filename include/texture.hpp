@@ -7,9 +7,11 @@
 namespace Renderer {
     class Texture {
     public:
-        Texture(std::string file, unsigned int antisotrpy, unsigned int colorChannels, bool linearColorSpace);
+        Texture(std::string file, unsigned int colorChannels, bool linearColorSpace);
         Texture() = default;
         ~Texture();
+
+        void generate(std::string file, unsigned int colorChannels, bool linearColorSpace);
 
         void Bind(unsigned int textureUint, Renderer::Shader &shader, std::string textureUniform);
         void Unbind();
