@@ -27,7 +27,6 @@ namespace Renderer {
 
     private:
 
-        // error if not on heap, i dont fucking know why
         Renderer::Texture albedoTxt; 
         Renderer::Texture aoTxt; 
         Renderer::Texture roughnessTxt; 
