@@ -23,6 +23,7 @@ void Renderer::Texture::generate(std::string file, unsigned int colorChannels, b
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY, 16);
 
+
     // load and generate the texture
     int width, height, nrChannels;
     stbi_set_flip_vertically_on_load(true);  

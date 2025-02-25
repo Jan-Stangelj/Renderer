@@ -8,6 +8,7 @@
 #include <lighting.hpp>
 #include <material.hpp>
 #include <mesh.hpp>
+#include <model.hpp>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -46,29 +47,23 @@ int main(){
         0, 2, 3
     };
 
-    // Textures, materials and lights
-    Renderer::Material mat;
-    mat.setAlbedoTexture("../assets/textures/red_brick_diff_4k.jpg");
-    mat.setAOTexture("../assets/textures/red_brick_ao_4k.jpg");
-    mat.setRoughnessTexture("../assets/textures/red_brick_rough_4k.jpg");
-    mat.setMetallic(0.0f);
-    mat.Bind(shader);
+    Renderer::Model test("../assets/models/sponza/Sponza.gltf");
 
-    Renderer::Mesh test(cube, indices, &mat);
-
-    Renderer::PointLight light(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f), 0.5f);
+    Renderer::PointLight light(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f), 4.0f);
     light.Bind(shader, 0);
-    Renderer::DirectionLight dirlight(-glm::vec3(1.0f, 1.0f, 0.0f), glm::vec3(1.0f), 0.2f);
-    dirlight.Bind(shader, 0);
+    Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 4.0f);
+    light2.Bind(shader, 1);
+    Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 4.0f);
+    light3.Bind(shader, 2);
 
-    shader.setInt("numPointLights", 1);
-    shader.setInt("numDirLights", 1);
+
+    shader.setInt("numPointLights", 3);
+    shader.setInt("numDirLights", 0);
 
     // Camera
     Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.01f, 100.0f);
     cam.setPosition(glm::vec3(0.0f, 0.0f, -3.0f));
 
-    std::cout << sizeof(test) + sizeof(mat);
 
     // Main loop
     while (!Window.shouldWindowClose()){
@@ -83,12 +78,11 @@ int main(){
 
         // Object translation
         glm::mat4 trans(1.0f);
-        trans = glm::scale(trans, glm::vec3(3.0f));
-        trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        trans = glm::scale(trans, glm::vec3(0.005f));
         shader.setMat4("model", trans);
 
         test.draw(shader);
-
+        
         Window.swapBuffers();
     }
     return 0;

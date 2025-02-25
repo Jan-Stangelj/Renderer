@@ -32,7 +32,7 @@ namespace Renderer {
 
     private:
         Renderer::VBO vbo;
-        Renderer::VAO vao;
+        Renderer::VAO* vao = new Renderer::VAO();
         Renderer::EBO ebo;
 
         std::vector<Vertex> vertices;

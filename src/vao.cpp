@@ -2,7 +2,6 @@
 
 Renderer::VAO::VAO() {
     glGenVertexArrays(1, &ID);
-    glBindVertexArray(ID);
 }
 
 Renderer::VAO::~VAO() {
