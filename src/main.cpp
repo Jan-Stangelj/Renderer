@@ -20,7 +20,7 @@ void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 }
 
 int main(){ 
-    Renderer::Window Window(1920, 1200, "OpenGL", false);
+    Renderer::Window Window(1920, 1080, "OpenGL", false);
 
     glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
     glfwSetCursorPosCallback(Window.getGlfwWindow(), mouseCallback);
@@ -41,7 +41,8 @@ int main(){
         0, 2, 3
     };
 
-    Renderer::Model test("../assets/models/sponza/Sponza.gltf");
+    Renderer::Model sponza("../assets/models/sponza/Sponza.gltf");
+    Renderer::Model helmet("../assets/models/helmet/DamagedHelmet.gltf");
 
     Renderer::PointLight light(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f), 4.0f);
     light.Bind(shader, 0);
@@ -57,7 +58,6 @@ int main(){
     // Camera
     Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.01f, 100.0f);
     cam.setPosition(glm::vec3(0.0f, 0.0f, -3.0f));
-
 
     // Main loop
     while (!Window.shouldWindowClose()){
@@ -76,12 +76,28 @@ int main(){
         trans = glm::scale(trans, glm::vec3(0.005f));
         shader.setMat4("model", trans);
 
-        test.draw(shader);
+        sponza.draw(shader);
+
+        trans = glm::mat4(1.0f);
+        trans = glm::scale(trans, glm::vec3(0.3f));
+        trans = glm::translate(trans, glm::vec3(0.0f, 3.0f, 0.0f));
+        trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        shader.setMat4("model", trans);
+        helmet.draw(shader);
+
+        trans = glm::translate(trans, glm::vec3(8.0f, 0.0f, 0.0f));
+        shader.setMat4("model", trans);
+        helmet.draw(shader);
+
+        trans = glm::translate(trans, glm::vec3(-16.0f, 0.0f, 0.0f));
+        shader.setMat4("model", trans);
+        helmet.draw(shader);
         
         Window.swapBuffers();
+
         auto stop = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-        std::cout << duration.count() << "\n";
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+        std::cout << "Frametime: " << duration.count() / 1000.0f << " FPS: " << 1000000.0f / duration.count() << "\n";
     }
     return 0;
 }

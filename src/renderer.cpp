@@ -94,6 +94,7 @@ Renderer::Window::Window(unsigned int Width, unsigned int Height, std::string Ti
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     width = Width;
     height = Height;
