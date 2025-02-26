@@ -93,6 +93,7 @@ Renderer::Window::Window(unsigned int Width, unsigned int Height, std::string Ti
 #endif
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 
     width = Width;
     height = Height;
