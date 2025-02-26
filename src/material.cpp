@@ -1,7 +1,9 @@
 #include "material.hpp"
 
+int getColorChannels(std::string file);
+
 Renderer::Material::Material(std::string albedo, std::string AO, std::string roughness, std::string metallic) : hasAlbedo(true), hasAO(true), hasRoughness(true), hasMetallic(true) {
-    albedoTxt = Renderer::Texture(albedo, 3, false);
+    albedoTxt = Renderer::Texture(albedo, getColorChannels(albedo), false);
     aoTxt = Renderer::Texture(AO, 1, true);
     roughnessTxt = Renderer::Texture(roughness, 1, true);
     metallicTxt = Renderer::Texture(metallic, 1, true);
@@ -44,7 +46,7 @@ void Renderer::Material::setMetallic(float metallic) {
 }
 
 void Renderer::Material::setAlbedoTexture(std::string albedo) {
-    albedoTxt.generate(albedo, 3, false);
+    albedoTxt.generate(albedo, getColorChannels(albedo), false);
     hasAlbedo = true;
 }
 void Renderer::Material::setAOTexture(std::string AO) {
@@ -58,4 +60,11 @@ void Renderer::Material::setRoughnessTexture(std::string roughness) {
 void Renderer::Material::setMetallicTexture(std::string metallic) {
     metallicTxt.generate(metallic, 1, true);
     hasMetallic = true;
+}
+
+int getColorChannels(std::string file) {
+    if (file.substr(file.find_last_of('.') + 1) == "png")
+        return 4;
+    else
+        return 3;
 }

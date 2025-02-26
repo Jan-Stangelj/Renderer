@@ -146,6 +146,8 @@ vec3 calcDirectionalLight(vec3 albedo, float roughness, float metallic, vec3 nor
 }
 
 void main() {
+	if (texture(mat.albedoTxt, texCoord).w == 0)
+		discard;
 	vec3 resoult = vec3(0.0f);
     vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
     float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
