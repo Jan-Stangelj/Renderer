@@ -1,13 +1,7 @@
 #include <renderer.hpp>
 #include <shader.hpp>
-#include <ebo.hpp>
-#include <vbo.hpp>
-#include <vao.hpp>
-#include <texture.hpp>
 #include <camera.hpp>
 #include <lighting.hpp>
-#include <material.hpp>
-#include <mesh.hpp>
 #include <model.hpp>
 
 #include <glm/glm.hpp>
@@ -15,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
-#include <vector>
+#include <chrono>
 
 float mouseX;
 float mouseY;
@@ -26,7 +20,7 @@ void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 }
 
 int main(){ 
-    Renderer::Window Window(1920, 1200, "OpenGL", true);
+    Renderer::Window Window(1920, 1200, "OpenGL", false);
 
     glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
     glfwSetCursorPosCallback(Window.getGlfwWindow(), mouseCallback);
@@ -67,6 +61,7 @@ int main(){
 
     // Main loop
     while (!Window.shouldWindowClose()){
+        auto start = std::chrono::high_resolution_clock::now();
         Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
         // Camera movement calls
@@ -84,6 +79,9 @@ int main(){
         test.draw(shader);
         
         Window.swapBuffers();
+        auto stop = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+        std::cout << duration.count() << "\n";
     }
     return 0;
 }
