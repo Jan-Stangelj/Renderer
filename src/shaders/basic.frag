@@ -10,14 +10,14 @@ in vec4 gl_FragCoord;
 struct material {
 	sampler2D albedoTxt;
 	sampler2D aoTxt;
-	sampler2D roughnessTxt;
-	sampler2D metallicTxt;
+	sampler2D metallicRoughnessTxt;
 	sampler2D emissionTxt;
 
 	vec3 albedo;
-	float AO, roughness, metallic;
+	float AO;
+	vec3 metallicRoughness;
 
-	bool hasAlbedo, hasAO, hasRoughness, hasMetallic;
+	bool hasAlbedo, hasAO, hasMetallicRoughness;
 };
 
 
@@ -153,14 +153,13 @@ void main() {
 	vec3 resoult = vec3(0.0f);
     vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
     float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
-	float roughness = mat.hasRoughness ? texture(mat.roughnessTxt, texCoord).x : mat.roughness;
-	float metallic = mat.hasMetallic ? texture(mat.metallicTxt, texCoord).x : mat.metallic;
+	vec3 metallicRoughness = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).rgb : mat.metallicRoughness;
 
 	for (int i = 0; i < numDirLights; i++) {
-		resoult += calcDirectionalLight(albedo, roughness, metallic, normal, dirLights[i]);
+		resoult += calcDirectionalLight(albedo, metallicRoughness.b, metallicRoughness.g, normal, dirLights[i]);
 	}
 	for (int i = 0; i < numPointLights; i++) {
-		resoult += calcPointLight(albedo, roughness, metallic, normal, pointLights[i]);
+		resoult += calcPointLight(albedo, metallicRoughness.b, metallicRoughness.g, normal, pointLights[i]);
 	}
 	resoult += vec3(0.03) * albedo * AO;
 	resoult += texture(mat.emissionTxt, texCoord).rgb;

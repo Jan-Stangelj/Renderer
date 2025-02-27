@@ -68,16 +68,15 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
         aiMaterial* mat = scene->mMaterials[mesh->mMaterialIndex];
 
         aiColor3D albedo;
-        float roughness, metallic;
+        aiColor3D metallicRoughness;
         mat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
-        mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness);
-        mat->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
+        mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, metallicRoughness.b);
+        mat->Get(AI_MATKEY_METALLIC_FACTOR, metallicRoughness.g);
 
         //std::cout << albedo.r << albedo.g << albedo.b << std::endl;
 
         material->setAlbedo(glm::vec3(albedo.r, albedo.g, albedo.b));
-        material->setRoughness(roughness);
-        material->setMetallic(metallic);
+        material->setMetallicRoughness(glm::vec3(0.0f, metallicRoughness.g, metallicRoughness.b));
         
         if (mat->GetTextureCount(aiTextureType_DIFFUSE) >= 1) {
             aiString str;
@@ -89,21 +88,15 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
             mat->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &str);
             material->setAOTexture(directory + '/' + str.C_Str());
         }
-        if (mat->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS) >= 1) {
+        if (mat->GetTextureCount(aiTextureType_GLTF_METALLIC_ROUGHNESS) >= 1) {
             aiString str;
-            mat->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &str);
-            material->setRoughnessTexture(directory + '/' + str.C_Str());
-        }
-        if (mat->GetTextureCount(aiTextureType_METALNESS) >= 1) {
-            aiString str;
-            mat->GetTexture(aiTextureType_METALNESS, 0, &str);
-            material->setMetallicTexture(directory + '/' + str.C_Str());
+            mat->GetTexture(aiTextureType_GLTF_METALLIC_ROUGHNESS, 0, &str);
+            material->setMetallicRoughnessTexture(directory + '/' + str.C_Str());
         }
         if (mat->GetTextureCount(aiTextureType_EMISSIVE) >= 1) {
             aiString str;
             mat->GetTexture(aiTextureType_EMISSIVE, 0, &str);
             material->setEmissionTexture(directory + '/' + str.C_Str());
-            std::cout << "Loaded emission\n";
         }
     }
     
