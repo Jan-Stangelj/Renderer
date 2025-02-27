@@ -97,7 +97,7 @@ int main(){
 
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-        //std::cout << "Frametime: " << duration.count() / 1000.0f << " FPS: " << 1000000.0f / duration.count() << "\n";
+        std::cout << "Frametime: " << duration.count() / 1000.0f << " FPS: " << 1000000.0f / duration.count() << "\n";
     }
     return 0;
 }
