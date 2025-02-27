@@ -44,11 +44,11 @@ int main(){
     Renderer::Model sponza("../assets/models/sponza/Sponza.gltf");
     Renderer::Model helmet("../assets/models/helmet/DamagedHelmet.gltf");
 
-    Renderer::PointLight light(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f), 4.0f);
+    Renderer::PointLight light(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
     light.Bind(shader, 0);
-    Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 4.0f);
+    Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
     light2.Bind(shader, 1);
-    Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 4.0f);
+    Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
     light3.Bind(shader, 2);
 
 

@@ -153,8 +153,8 @@ void main() {
 	vec3 resoult = vec3(0.0f);
     vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
     float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
-	float roughness = mat.hasRoughness ? texture(mat.roughnessTxt, texCoord).b : mat.roughness;
-	float metallic = mat.hasMetallic ? texture(mat.metallicTxt, texCoord).g : mat.metallic;
+	float roughness = mat.hasRoughness ? texture(mat.roughnessTxt, texCoord).g : mat.roughness;
+	float metallic = mat.hasMetallic ? texture(mat.metallicTxt, texCoord).b : mat.metallic;
 
 	for (int i = 0; i < numDirLights; i++) {
 		resoult += calcDirectionalLight(albedo, roughness, metallic, normal, dirLights[i]);
