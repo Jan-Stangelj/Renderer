@@ -3,10 +3,10 @@
 int getColorChannels(std::string file);
 
 Renderer::Material::Material(std::string albedo, std::string AO, std::string roughness, std::string metallic) : hasAlbedo(true), hasAO(true), hasRoughness(true), hasMetallic(true) {
-    albedoTxt = Renderer::Texture(albedo, getColorChannels(albedo), false);
-    aoTxt = Renderer::Texture(AO, 1, true);
-    roughnessTxt = Renderer::Texture(roughness, 1, true);
-    metallicTxt = Renderer::Texture(metallic, 1, true);
+    albedoTxt = Renderer::Texture(albedo, false);
+    aoTxt = Renderer::Texture(AO, true);
+    roughnessTxt = Renderer::Texture(roughness, true);
+    metallicTxt = Renderer::Texture(metallic, true);
 }
 
 Renderer::Material::Material(glm::vec3 albedo, float AO, float roughness, float metallic)
@@ -20,6 +20,7 @@ void Renderer::Material::Bind(Renderer::Shader Shader) {
     if (hasAO) aoTxt.Bind(1, Shader, "mat.aoTxt");
     if (hasRoughness) roughnessTxt.Bind(2, Shader, "mat.roughnessTxt");
     if (hasMetallic) metallicTxt.Bind(3, Shader, "mat.metallicTxt");
+    emissionTxt.Bind(4, Shader, "mat.emissionTxt");
 
     Shader.setVec3("mat.albedo", albedo);
     Shader.setFloat("mat.AO", AO);
@@ -46,25 +47,22 @@ void Renderer::Material::setMetallic(float metallic) {
 }
 
 void Renderer::Material::setAlbedoTexture(std::string albedo) {
-    albedoTxt.generate(albedo, getColorChannels(albedo), false);
+    albedoTxt.generate(albedo, false);
     hasAlbedo = true;
 }
 void Renderer::Material::setAOTexture(std::string AO) {
-    aoTxt.generate(AO, 1, true);
+    aoTxt.generate(AO, true);
     hasAO = true;
 }
 void Renderer::Material::setRoughnessTexture(std::string roughness) {
-    roughnessTxt.generate(roughness, 1, true);
+    roughnessTxt.generate(roughness, true);
     hasRoughness = true;
 }
 void Renderer::Material::setMetallicTexture(std::string metallic) {
-    metallicTxt.generate(metallic, 1, true);
+    metallicTxt.generate(metallic, true);
     hasMetallic = true;
 }
 
-int getColorChannels(std::string file) {
-    if (file.substr(file.find_last_of('.') + 1) == "png")
-        return 4;
-    else
-        return 3;
+void Renderer::Material::setEmissionTexture(std::string emission) {
+    emissionTxt.generate(emission, false);
 }

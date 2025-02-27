@@ -4,6 +4,7 @@ out vec4 FragColor;
 in vec2 texCoord;
 in vec3 normal;
 in vec3 fragPos;
+in vec4 gl_FragCoord;
 
 
 struct material {
@@ -11,6 +12,7 @@ struct material {
 	sampler2D aoTxt;
 	sampler2D roughnessTxt;
 	sampler2D metallicTxt;
+	sampler2D emissionTxt;
 
 	vec3 albedo;
 	float AO, roughness, metallic;
@@ -154,12 +156,13 @@ void main() {
 	float roughness = mat.hasRoughness ? texture(mat.roughnessTxt, texCoord).x : mat.roughness;
 	float metallic = mat.hasMetallic ? texture(mat.metallicTxt, texCoord).x : mat.metallic;
 
-	for (int i = 0; i < numDirLights; ++i) {
+	for (int i = 0; i < numDirLights; i++) {
 		resoult += calcDirectionalLight(albedo, roughness, metallic, normal, dirLights[i]);
 	}
-	for (int i = 0; i < numPointLights; ++i) {
+	for (int i = 0; i < numPointLights; i++) {
 		resoult += calcPointLight(albedo, roughness, metallic, normal, pointLights[i]);
 	}
 	resoult += vec3(0.03) * albedo * AO;
+	resoult += texture(mat.emissionTxt, texCoord).rgb;
 	FragColor.rgb = pow(resoult, vec3(1.0/2.2));
 }

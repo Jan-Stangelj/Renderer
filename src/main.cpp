@@ -101,9 +101,3 @@ int main(){
     }
     return 0;
 }
-
-// TODO:
-// - zorganiziraj
-// - pravilni normal mapi
-// - depth mapi
-// - self shadowi za depth mappe

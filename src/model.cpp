@@ -99,6 +99,12 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
             mat->GetTexture(aiTextureType_METALNESS, 0, &str);
             material->setMetallicTexture(directory + '/' + str.C_Str());
         }
+        if (mat->GetTextureCount(aiTextureType_EMISSIVE) >= 1) {
+            aiString str;
+            mat->GetTexture(aiTextureType_EMISSIVE, 0, &str);
+            material->setEmissionTexture(directory + '/' + str.C_Str());
+            std::cout << "Loaded emission\n";
+        }
     }
     
     return Renderer::Mesh(vertices, indices, material);
