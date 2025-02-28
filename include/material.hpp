@@ -24,6 +24,7 @@ namespace Renderer {
         void setAOTexture(std::string AO);
         void setRoughnessTexture(std::string roughness);
         void setMetallicTexture(std::string metallic);
+        void setNormalTexture(std::string normal);
         void setEmissionTexture(std::string emission);
 
     private:
@@ -32,6 +33,7 @@ namespace Renderer {
         Renderer::Texture aoTxt; 
         Renderer::Texture roughnessTxt; 
         Renderer::Texture metallicTxt;
+        Renderer::Texture normalTxt;
         Renderer::Texture emissionTxt;
 
         glm::vec3 albedo = glm::vec3(1.0f);

@@ -6,7 +6,8 @@ Renderer::Model::Model(std::string path) {
                                                    aiProcess_FlipUVs |
                                                    aiProcess_GenNormals |
                                                    aiProcess_OptimizeMeshes |
-                                                   aiProcess_OptimizeGraph);
+                                                   aiProcess_OptimizeGraph |
+                                                   aiProcess_CalcTangentSpace);
     
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
         std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << "\n";
@@ -54,6 +55,10 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
         }
         else
             vertex.texCoord = glm::vec2(0.0f);
+        
+        vertex.tangent.x = mesh->mTangents[i].x;
+        vertex.tangent.y = mesh->mTangents[i].y;
+        vertex.tangent.z = mesh->mTangents[i].z;
 
         vertices.push_back(vertex);
     }
@@ -72,8 +77,6 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
         mat->Get(AI_MATKEY_COLOR_DIFFUSE, albedo);
         mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness);
         mat->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
-
-        //std::cout << albedo.r << albedo.g << albedo.b << std::endl;
 
         material->setAlbedo(glm::vec3(albedo.r, albedo.g, albedo.b));
         material->setRoughness(roughness);
@@ -99,11 +102,15 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
             mat->GetTexture(aiTextureType_METALNESS, 0, &str);
             material->setMetallicTexture(directory + '/' + str.C_Str());
         }
+        if (mat->GetTextureCount(aiTextureType_NORMALS)) {
+            aiString str;
+            mat->GetTexture(aiTextureType_NORMALS, 0, &str);
+            material->setNormalTexture(directory + '/' + str.C_Str());
+        }
         if (mat->GetTextureCount(aiTextureType_EMISSIVE) >= 1) {
             aiString str;
             mat->GetTexture(aiTextureType_EMISSIVE, 0, &str);
             material->setEmissionTexture(directory + '/' + str.C_Str());
-            std::cout << "Loaded emission\n";
         }
     }
     

@@ -20,6 +20,7 @@ void Renderer::Material::Bind(Renderer::Shader Shader) {
     if (hasAO) aoTxt.Bind(1, Shader, "mat.aoTxt");
     if (hasRoughness) roughnessTxt.Bind(2, Shader, "mat.roughnessTxt");
     if (hasMetallic) metallicTxt.Bind(3, Shader, "mat.metallicTxt");
+    normalTxt.Bind(5, Shader, "mat.normalTxt");
     emissionTxt.Bind(4, Shader, "mat.emissionTxt");
 
     Shader.setVec3("mat.albedo", albedo);
@@ -61,6 +62,9 @@ void Renderer::Material::setRoughnessTexture(std::string roughness) {
 void Renderer::Material::setMetallicTexture(std::string metallic) {
     metallicTxt.generate(metallic, true);
     hasMetallic = true;
+}
+void Renderer::Material::setNormalTexture(std::string normal) {
+    normalTxt.generate(normal, true);
 }
 
 void Renderer::Material::setEmissionTexture(std::string emission) {

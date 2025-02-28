@@ -11,6 +11,7 @@ Renderer::Mesh::Mesh(const std::vector<Vertex> vertices,
     vao->addAttribute(Renderer::vertexAttribute(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0));
     vao->addAttribute(Renderer::vertexAttribute(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal)));
     vao->addAttribute(Renderer::vertexAttribute(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord)));
+    vao->addAttribute(Renderer::vertexAttribute(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent)));
 
     vao->unbind();
 }
