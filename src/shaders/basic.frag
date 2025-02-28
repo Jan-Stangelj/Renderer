@@ -27,6 +27,16 @@ struct pointLight {
 	float strenght;
 };
 
+struct spotLight {
+	vec3 position;
+	vec3 color;
+	float strenght;
+
+	vec3 direction;
+	float cutoff; 
+	float outerCutoff;
+};
+
 
 struct directionalLight {
 	vec3 direction;
@@ -37,8 +47,11 @@ struct directionalLight {
 uniform material mat;
 
 uniform pointLight pointLights[32];
+uniform spotLight spotLights[32];
 uniform directionalLight dirLights[4];
+
 uniform int numPointLights;
+uniform int numSpotLights;
 uniform int numDirLights;
 
 uniform vec3 camPos;
@@ -78,7 +91,7 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-vec3 calcPointLight(vec3 albedo, float roughness, float metallic, vec3 normal, pointLight light) {
+vec3 calcLight(vec3 albedo, float roughness, float metallic, vec3 normal, vec3 radiance, vec3 lightDir) {
 
     vec3 N = normal;
     vec3 V = normalize(camPos - fragPos);
@@ -87,11 +100,8 @@ vec3 calcPointLight(vec3 albedo, float roughness, float metallic, vec3 normal, p
     F0 = mix(F0, albedo, metallic);
 
 	// calculate per-light radiance
-	vec3 L = normalize(light.position - fragPos);
+	vec3 L = normalize(lightDir);
 	vec3 H = normalize(V + L);
-	float distance = length(light.position - fragPos);
-	float attenuation = light.strenght / pow(distance, distance);
-	vec3 radiance = light.color * attenuation;
 
 	// Cook-Torrance BRDF
 	float NDF = DistributionGGX(N, H, roughness);
@@ -114,39 +124,6 @@ vec3 calcPointLight(vec3 albedo, float roughness, float metallic, vec3 normal, p
 	return (kD * albedo / PI + specular) * radiance * NdotL;
 }
 
-vec3 calcDirectionalLight(vec3 albedo, float roughness, float metallic, vec3 normal, directionalLight light) {
-
-    vec3 N = normal;
-    vec3 V = normalize(camPos - fragPos);
-
-	vec3 F0 = vec3(0.04); 
-    F0 = mix(F0, albedo, metallic);
-
-	// calculate per-light radiance
-	vec3 L = normalize(-light.direction);
-	vec3 H = normalize(V + L);
-	vec3 radiance = light.color * light.intensity;
-
-	// Cook-Torrance BRDF
-	float NDF = DistributionGGX(N, H, roughness);   
-	float G   = GeometrySmith(N, V, L, roughness);      
-	vec3 F    = fresnelSchlick(clamp(dot(H, V), 0.0, 1.0), F0);
-		
-	vec3 numerator    = NDF * G * F; 
-	float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.0001; // + 0.0001 to prevent divide by zero
-	vec3 specular = numerator / denominator;
-	
-	// kS is equal to Fresnel
-	vec3 kS = F;
-	vec3 kD = vec3(1.0) - kS;
-
-	kD *= 1.0 - metallic;	  
-
-	// scale light by NdotL
-	float NdotL = max(dot(N, L), 0.0);  
-	return (kD * albedo / PI + specular) * radiance * NdotL;
-}
-
 void main() {
 	if (texture(mat.albedoTxt, texCoord).w == 0)
 		discard;
@@ -161,15 +138,39 @@ void main() {
 	float roughness = mat.hasRoughness ? texture(mat.roughnessTxt, texCoord).g : mat.roughness;
 	float metallic = mat.hasMetallic ? texture(mat.metallicTxt, texCoord).b : mat.metallic;
 
-	for (int i = 0; i < numDirLights; i++) 
-		resoult += calcDirectionalLight(albedo, roughness, metallic, normal, dirLights[i]);
+	for (int i = 0; i < numDirLights; i++) {
+		directionalLight l = dirLights[i];
 
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * l.intensity, -l.direction);
+	}
 	for (int i = 0; i < numPointLights; i++) {
-		float distance = length(pointLights[i].position - fragPos);
-		float attenuation = pointLights[i].strenght / pow(distance, distance);
+		pointLight l = pointLights[i];
+
+		float distance = length(l.position - fragPos);
+		float attenuation = l.strenght / pow(distance, distance);
 		if (attenuation < 0.025)
 			continue;
-		resoult += calcPointLight(albedo, roughness, metallic, normal, pointLights[i]);
+
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, l.position - fragPos);
+	}
+	for (int i = 0; i < numSpotLights; i++) {
+		spotLight l = spotLights[i];
+
+		vec3 lightDir = l.position - fragPos;
+		float distance = length(lightDir);
+		float attenuation = l.strenght / pow(distance, distance);
+		if (attenuation < 0.025)
+			continue;
+		
+		float theta = dot(normalize(lightDir), normalize(-l.direction));
+
+		if (theta < l.outerCutoff)
+			continue;
+
+		float epsilon = l.cutoff - l.outerCutoff;
+		float intensity = clamp((theta - l.outerCutoff) / epsilon, 0.0, 1.0);
+
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation * intensity, lightDir);
 	}
 
 	resoult += vec3(0.03) * albedo * AO;

@@ -51,8 +51,12 @@ int main(){
     Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
     light3.Bind(shader, 2);
 
+    Renderer::SpotLight light4(glm::vec3(0.0f, 4.0f, 1.0f), glm::vec3(1.0f), 16.0f, glm::vec3(0.0f, 0.0f, -1.0f), 15.0f, 60.0f);
+    light4.Bind(shader, 0);
+
 
     shader.setInt("numPointLights", 3);
+    shader.setInt("numSpotLights", 1);
     shader.setInt("numDirLights", 0);
 
     // Camera
