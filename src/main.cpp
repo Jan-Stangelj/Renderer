@@ -20,7 +20,7 @@ void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 }
 
 int main(){ 
-    Renderer::Window Window(1920, 1080, "OpenGL", false);
+    Renderer::Window Window(1280, 720, "Renderer", false);
 
     glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
     glfwSetCursorPosCallback(Window.getGlfwWindow(), mouseCallback);
@@ -56,7 +56,7 @@ int main(){
     shader.setInt("numDirLights", 0);
 
     // Camera
-    Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.01f, 100.0f);
+    Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.15f, 100.0f);
     cam.setPosition(glm::vec3(0.0f, 0.0f, -3.0f));
 
     // Main loop

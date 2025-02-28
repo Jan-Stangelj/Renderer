@@ -164,8 +164,13 @@ void main() {
 	for (int i = 0; i < numDirLights; i++) 
 		resoult += calcDirectionalLight(albedo, roughness, metallic, normal, dirLights[i]);
 
-	for (int i = 0; i < numPointLights; i++)
+	for (int i = 0; i < numPointLights; i++) {
+		float distance = length(pointLights[i].position - fragPos);
+		float attenuation = pointLights[i].strenght / pow(distance, distance);
+		if (attenuation < 0.025)
+			continue;
 		resoult += calcPointLight(albedo, roughness, metallic, normal, pointLights[i]);
+	}
 
 	resoult += vec3(0.03) * albedo * AO;
 	resoult += texture(mat.emissionTxt, texCoord).rgb;
