@@ -16,10 +16,6 @@ Renderer::Mesh::Mesh(const std::vector<Vertex> vertices,
     vao->unbind();
 }
 
-Renderer::Mesh::~Mesh() {
-    delete(mat);
-}
-
 void Renderer::Mesh::draw(Renderer::Shader shader) {
     shader.use();
     mat->Bind(shader);
