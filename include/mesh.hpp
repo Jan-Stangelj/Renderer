@@ -27,7 +27,7 @@ namespace Renderer {
         Mesh(const std::vector<Vertex> vertices, 
              const std::vector<unsigned int> indices,
              Renderer::Material* mat);
-        ~Mesh() = default;
+        ~Mesh();
 
         void draw(Renderer::Shader shader);
 
