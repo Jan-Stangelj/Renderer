@@ -79,8 +79,7 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
         mat->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
 
         material->setAlbedo(glm::vec3(albedo.r, albedo.g, albedo.b));
-        material->setRoughness(roughness);
-        material->setMetallic(metallic);
+        material->setMetallicRoughness(glm::vec3(0.0f, roughness, metallic));
         
         if (mat->GetTextureCount(aiTextureType_DIFFUSE) >= 1) {
             aiString str;
@@ -92,15 +91,10 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
             mat->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &str);
             material->setAOTexture(directory + '/' + str.C_Str());
         }
-        if (mat->GetTextureCount(aiTextureType_DIFFUSE_ROUGHNESS) >= 1) {
+        if (mat->GetTextureCount(aiTextureType_GLTF_METALLIC_ROUGHNESS) >= 1) {
             aiString str;
-            mat->GetTexture(aiTextureType_DIFFUSE_ROUGHNESS, 0, &str);
-            material->setRoughnessTexture(directory + '/' + str.C_Str());
-        }
-        if (mat->GetTextureCount(aiTextureType_METALNESS) >= 1) {
-            aiString str;
-            mat->GetTexture(aiTextureType_METALNESS, 0, &str);
-            material->setMetallicTexture(directory + '/' + str.C_Str());
+            mat->GetTexture(aiTextureType_GLTF_METALLIC_ROUGHNESS, 0, &str);
+            material->setMetallicRoughnessTexture(directory + '/' + str.C_Str());
         }
         if (mat->GetTextureCount(aiTextureType_NORMALS)) {
             aiString str;

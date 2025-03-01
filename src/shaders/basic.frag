@@ -9,15 +9,15 @@ in mat3 TBN;
 struct material {
 	sampler2D albedoTxt;
 	sampler2D aoTxt;
-	sampler2D roughnessTxt;
-	sampler2D metallicTxt;
+	sampler2D metallicRoughnessTxt;
 	sampler2D normalTxt;
 	sampler2D emissionTxt;
 
 	vec3 albedo;
-	float AO, roughness, metallic;
+	float AO;
+	vec3 metallicRoughness;
 
-	bool hasAlbedo, hasAO, hasRoughness, hasMetallic;
+	bool hasAlbedo, hasAO, hasMetallicRoughness;
 };
 
 
@@ -135,8 +135,8 @@ void main() {
 	vec3 resoult = vec3(0.0f);
     vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
     float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
-	float roughness = mat.hasRoughness ? texture(mat.roughnessTxt, texCoord).g : mat.roughness;
-	float metallic = mat.hasMetallic ? texture(mat.metallicTxt, texCoord).b : mat.metallic;
+	float roughness = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).g : mat.metallicRoughness.g;
+	float metallic = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).b : mat.metallicRoughness.b;
 
 	for (int i = 0; i < numDirLights; i++) {
 		directionalLight l = dirLights[i];
