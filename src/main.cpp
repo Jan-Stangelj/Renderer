@@ -54,6 +54,7 @@ int main(){
     while (!Window.shouldWindowClose()){
         auto start = std::chrono::high_resolution_clock::now();
         Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+        shader.setVec3("skybox", glm::vec3(0.2f, 0.2f, 0.3f));
 
         // Camera movement calls
         cam.cameraMovement(Window, Window.deltaTime(), 1.0f);

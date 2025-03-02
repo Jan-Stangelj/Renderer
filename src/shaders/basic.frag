@@ -54,6 +54,8 @@ uniform int numPointLights;
 uniform int numSpotLights;
 uniform int numDirLights;
 
+uniform vec3 skybox;
+
 uniform vec3 camPos;
 
 const float PI = 3.14159265359;
@@ -173,7 +175,7 @@ void main() {
 		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation * intensity, lightDir);
 	}
 
-	resoult += vec3(0.03) * albedo * AO;
+	resoult += skybox * albedo * AO;
 	resoult += texture(mat.emissionTxt, texCoord).rgb;
 
 	FragColor.rgb = pow(resoult, vec3(1.0/2.2));
