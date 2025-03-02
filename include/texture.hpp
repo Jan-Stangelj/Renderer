@@ -1,7 +1,7 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <shader.hpp>
+#include "glad/glad.h"
+#include "shader.hpp"
 
 
 namespace Renderer {

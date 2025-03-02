@@ -1,12 +1,12 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "glm/glm.hpp"
 
-#include <vbo.hpp>
-#include <vao.hpp>
-#include <ebo.hpp>
-#include <material.hpp>
-#include <shader.hpp>
+#include "vbo.hpp"
+#include "vao.hpp"
+#include "ebo.hpp"
+#include "material.hpp"
+#include "shader.hpp"
 
 
 #include <vector>

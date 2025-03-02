@@ -1,6 +1,6 @@
 #pragma once
 
-#include <shader.hpp>
+#include "shader.hpp"
 #include <string>
 
 namespace Renderer {

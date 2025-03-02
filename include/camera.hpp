@@ -1,12 +1,12 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
-#include <shader.hpp>
-#include <renderer.hpp>
+#include "shader.hpp"
+#include "window.hpp"
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 namespace Renderer {
     class Camera {

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <texture.hpp>
-#include <shader.hpp>
-#include <glm/glm.hpp>
+#include "texture.hpp"
+#include "shader.hpp"
+#include "glm/glm.hpp"
 
 #include <string>
 
