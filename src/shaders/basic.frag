@@ -148,7 +148,7 @@ void main() {
 
 		float distance = length(l.position - fragPos);
 		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 0.025)
+		if (attenuation < 0.012)
 			continue;
 
 		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, l.position - fragPos);
@@ -159,7 +159,7 @@ void main() {
 		vec3 lightDir = l.position - fragPos;
 		float distance = length(lightDir);
 		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 0.025)
+		if (attenuation < 0.012)
 			continue;
 		
 		float theta = dot(normalize(lightDir), normalize(-l.direction));
