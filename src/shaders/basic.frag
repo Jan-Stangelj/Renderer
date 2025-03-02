@@ -178,5 +178,7 @@ void main() {
 	resoult += skybox * albedo * AO;
 	resoult += texture(mat.emissionTxt, texCoord).rgb;
 
+	resoult = resoult / (resoult + vec3(1.0));
+
 	FragColor.rgb = pow(resoult, vec3(1.0/2.2));
 }
