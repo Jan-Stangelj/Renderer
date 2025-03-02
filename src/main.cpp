@@ -28,19 +28,6 @@ int main(){
     Renderer::Shader shader("../src/shaders/basic.vert", "../src/shaders/basic.frag");
     shader.use();
 
-    std::vector<Renderer::Vertex> cube = {
-        // positions          // normals           // texture coords
-        Renderer::Vertex(glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec3(0.0f,  0.0f, -1.0f),  glm::vec2(0.0f, 0.0f)),
-        Renderer::Vertex(glm::vec3( 0.5f, -0.5f, -0.5f),  glm::vec3(0.0f,  0.0f, -1.0f),  glm::vec2(1.0f, 0.0f)),
-        Renderer::Vertex(glm::vec3( 0.5f,  0.5f, -0.5f),  glm::vec3(0.0f,  0.0f, -1.0f),  glm::vec2(1.0f, 1.0f)),
-        Renderer::Vertex(glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec3(0.0f,  0.0f, -1.0f),  glm::vec2(0.0f, 1.0f))
-    };
-
-    std::vector<unsigned int> indices = {
-        0, 1, 2,
-        0, 2, 3
-    };
-
     Renderer::Model sponza("../assets/models/sponza/Sponza.gltf");
     Renderer::Model helmet("../assets/models/helmet/DamagedHelmet.gltf");
 
@@ -61,7 +48,7 @@ int main(){
 
     // Camera
     Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.15f, 100.0f);
-    cam.setPosition(glm::vec3(0.0f, 0.0f, -3.0f));
+    cam.setPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 
     // Main loop
     while (!Window.shouldWindowClose()){
@@ -88,20 +75,12 @@ int main(){
         trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
         shader.setMat4("model", trans);
         helmet.draw(shader);
-
-        trans = glm::translate(trans, glm::vec3(8.0f, 0.0f, 0.0f));
-        shader.setMat4("model", trans);
-        helmet.draw(shader);
-
-        trans = glm::translate(trans, glm::vec3(-16.0f, 0.0f, 0.0f));
-        shader.setMat4("model", trans);
-        helmet.draw(shader);
         
         Window.swapBuffers();
 
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-        std::cout << "Frametime: " << duration.count() / 1000.0f << " FPS: " << 1000000.0f / duration.count() << "\n";
+        std::cout << "Frametime: " << duration.count() / 1000.0f << "\n";
     }
     return 0;
 }
