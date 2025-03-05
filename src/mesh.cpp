@@ -18,7 +18,17 @@ Renderer::Mesh::Mesh(const std::vector<Vertex> vertices,
 
 void Renderer::Mesh::draw(Renderer::Shader shader) {
     shader.use();
+
+    glm::mat4 trans(1.0f);
+    trans = glm::translate(trans, position);
+    trans = glm::scale(trans, size);
+    trans = glm::rotate(trans, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+    trans = glm::rotate(trans, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+    trans = glm::rotate(trans, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+    shader.setMat4("model", trans);
+
     mat->Bind(shader);
     vao->bind();
+    
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }

@@ -113,6 +113,9 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
 
 void Renderer::Model::draw(Renderer::Shader shader) {
     for (unsigned int i = 0; i < meshes.size(); i++) {
+        meshes[i].position = position;
+        meshes[i].rotation = rotation;
+        meshes[i].size = size;
         meshes[i].draw(shader);
     }
 }

@@ -6,6 +6,10 @@
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+
 #include <string>
 #include <vector>
 #include <iostream>
@@ -17,6 +21,10 @@ namespace Renderer {
         Model(std::string path);
 
         void draw(Renderer::Shader shader);
+
+        glm::vec3 size = glm::vec3(1.0f);
+        glm::vec3 rotation = glm::vec3(0.0f);
+        glm::vec3 position = glm::vec3(0.0f);
     private:
         
         std::vector<Mesh> meshes;

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include "vbo.hpp"
 #include "vao.hpp"
@@ -30,6 +32,10 @@ namespace Renderer {
         ~Mesh() = default;
 
         void draw(Renderer::Shader shader);
+
+        glm::vec3 size = glm::vec3(1.0f);
+        glm::vec3 rotation = glm::vec3(0.0f);
+        glm::vec3 position = glm::vec3(0.0f);
 
     private:
         Renderer::VBO vbo;

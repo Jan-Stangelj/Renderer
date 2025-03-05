@@ -20,16 +20,22 @@ void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
 }
 
 int main(){ 
-    Renderer::Window Window(1280, 720, "Renderer", false);
+    Renderer::Window Window(1280, 720, "Renderer", true);
 
     glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
     glfwSetCursorPosCallback(Window.getGlfwWindow(), mouseCallback);
 
     Renderer::Shader shader("../src/shaders/basic.vert", "../src/shaders/basic.frag");
     shader.use();
+    shader.setVec3("skybox", glm::vec3(0.2f, 0.2f, 0.3f));
 
     Renderer::Model sponza("../assets/models/sponza/Sponza.gltf");
+    sponza.size = glm::vec3(0.005f);
+
     Renderer::Model helmet("../assets/models/helmet/DamagedHelmet.gltf");
+    helmet.size = glm::vec3(0.25f);
+    helmet.position = glm::vec3(0.0f, 1.0f, 0.0f);
+    helmet.rotation = glm::vec3(90.0f, 0.0f, 0.0f);
 
     Renderer::PointLight light(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f), 64.0f);
     light.Bind(shader, 0);
@@ -52,36 +58,16 @@ int main(){
 
     // Main loop
     while (!Window.shouldWindowClose()){
-        auto start = std::chrono::high_resolution_clock::now();
         Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
-        shader.setVec3("skybox", glm::vec3(0.2f, 0.2f, 0.3f));
 
-        // Camera movement calls
         cam.cameraMovement(Window, Window.deltaTime(), 1.0f);
         cam.cameraRotation(0.05f, mouseX, mouseY);
         cam.applyToShader(shader);
 
-        shader.setVec3("camPos", cam.getPosition());
-
-        // Object translation
-        glm::mat4 trans(1.0f);
-        trans = glm::scale(trans, glm::vec3(0.005f));
-        shader.setMat4("model", trans);
-
         sponza.draw(shader);
-
-        trans = glm::mat4(1.0f);
-        trans = glm::scale(trans, glm::vec3(0.3f));
-        trans = glm::translate(trans, glm::vec3(0.0f, 3.0f, 0.0f));
-        trans = glm::rotate(trans, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-        shader.setMat4("model", trans);
         helmet.draw(shader);
         
         Window.swapBuffers();
-
-        auto stop = std::chrono::high_resolution_clock::now();
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-        std::cout << "Frametime: " << duration.count() / 1000.0f << "\n";
     }
     return 0;
 }
