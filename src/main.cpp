@@ -11,19 +11,8 @@
 #include <iostream>
 #include <chrono>
 
-float mouseX;
-float mouseY;
-
-void mouseCallback(GLFWwindow* window, double xposIn, double yposIn) {
-    mouseX = xposIn;
-    mouseY = yposIn;
-}
-
 int main(){ 
     Renderer::Window Window(1280, 720, "Renderer", true);
-
-    glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);  
-    glfwSetCursorPosCallback(Window.getGlfwWindow(), mouseCallback);
 
     Renderer::Shader shader("../src/shaders/basic.vert", "../src/shaders/basic.frag");
     shader.use();
@@ -63,7 +52,7 @@ int main(){
         Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
         cam.cameraMovement(Window, Window.deltaTime(), 1.5f);
-        cam.cameraRotation(0.05f, mouseX, mouseY);
+        cam.cameraRotation(0.075f);
         cam.applyToShader(shader);
 
         sponza.draw(shader);

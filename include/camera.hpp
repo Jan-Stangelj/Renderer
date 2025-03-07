@@ -21,7 +21,7 @@ namespace Renderer {
         void setTarget(glm::vec3 Target);
 
         void cameraMovement(Renderer::Window &Window, float deltaTime, float cameraSpeed);
-        void cameraRotation(float mouseSensetivity, float xpos, float ypos);
+        void cameraRotation(float mouseSensetivity);
 
         void applyToShader(Renderer::Shader shader);
 
@@ -47,7 +47,9 @@ namespace Renderer {
         float mouseSens;
         float lastX = 100.0f;
         float lastY = 100.0f;
+        double xpos, ypos;
         bool firstMouse = true;
+        bool mouseDown = false;
         float yaw = -90.0f;
         float pitch = 0.0f;
 
