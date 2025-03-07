@@ -56,6 +56,8 @@ int main(){
     Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.1f, 1000.0f);
     cam.setPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 
+    shader.setFloat("exposure", 0.8f);
+
     // Main loop
     while (!Window.shouldWindowClose()){
         Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
