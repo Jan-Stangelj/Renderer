@@ -60,6 +60,69 @@ uniform vec3 camPos;
 
 const float PI = 3.14159265359;
 
+float DistributionGGX(vec3 N, vec3 H, float roughness);
+float GeometrySchlickGGX(float NdotV, float roughness);
+float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
+
+vec3 calcLight(vec3 albedo, float roughness, float metallic, vec3 normal, vec3 radiance, vec3 lightDir);
+
+void main() {
+	if (texture(mat.albedoTxt, texCoord).w == 0)
+		discard;
+
+	vec3 normal = texture(mat.normalTxt, texCoord).rgb;
+	normal = normal * 2.0 - 1.0;
+	normal = normalize(TBN * normal);
+	
+	vec3 resoult = vec3(0.0f);
+    vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
+    float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
+	float roughness = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).g : mat.metallicRoughness.g;
+	float metallic = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).b : mat.metallicRoughness.b;
+
+	for (int i = 0; i < numDirLights; i++) {
+		directionalLight l = dirLights[i];
+
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * l.intensity, -l.direction);
+	}
+	for (int i = 0; i < numPointLights; i++) {
+		pointLight l = pointLights[i];
+
+		float distance = length(l.position - fragPos);
+		float attenuation = l.strenght / pow(distance, distance);
+		if (attenuation < 0.012)
+			continue;
+
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, l.position - fragPos);
+	}
+	for (int i = 0; i < numSpotLights; i++) {
+		spotLight l = spotLights[i];
+
+		vec3 lightDir = l.position - fragPos;
+		float distance = length(lightDir);
+		float attenuation = l.strenght / pow(distance, distance);
+		if (attenuation < 0.012)
+			continue;
+		
+		float theta = dot(normalize(lightDir), normalize(-l.direction));
+
+		if (theta < l.outerCutoff)
+			continue;
+
+		float epsilon = l.cutoff - l.outerCutoff;
+		float intensity = clamp((theta - l.outerCutoff) / epsilon, 0.0, 1.0);
+
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation * intensity, lightDir);
+	}
+
+	resoult += skybox * albedo * AO;
+	resoult += texture(mat.emissionTxt, texCoord).rgb;
+
+	resoult = resoult / (resoult + vec3(1.0));
+
+	FragColor.rgb = pow(resoult, vec3(1.0/2.2));
+}
+
 float DistributionGGX(vec3 N, vec3 H, float roughness) {
     float a = roughness*roughness;
     float a2 = a*a;
@@ -124,61 +187,4 @@ vec3 calcLight(vec3 albedo, float roughness, float metallic, vec3 normal, vec3 r
 	float NdotL = max(dot(N, L), 0.0);  
 
 	return (kD * albedo / PI + specular) * radiance * NdotL;
-}
-
-void main() {
-	if (texture(mat.albedoTxt, texCoord).w == 0)
-		discard;
-
-	vec3 normal = texture(mat.normalTxt, texCoord).rgb;
-	normal = normal * 2.0 - 1.0;
-	normal = normalize(TBN * normal);
-	
-	vec3 resoult = vec3(0.0f);
-    vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
-    float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
-	float roughness = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).g : mat.metallicRoughness.g;
-	float metallic = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).b : mat.metallicRoughness.b;
-
-	for (int i = 0; i < numDirLights; i++) {
-		directionalLight l = dirLights[i];
-
-		resoult += calcLight(albedo, roughness, metallic, normal, l.color * l.intensity, -l.direction);
-	}
-	for (int i = 0; i < numPointLights; i++) {
-		pointLight l = pointLights[i];
-
-		float distance = length(l.position - fragPos);
-		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 0.012)
-			continue;
-
-		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, l.position - fragPos);
-	}
-	for (int i = 0; i < numSpotLights; i++) {
-		spotLight l = spotLights[i];
-
-		vec3 lightDir = l.position - fragPos;
-		float distance = length(lightDir);
-		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 0.012)
-			continue;
-		
-		float theta = dot(normalize(lightDir), normalize(-l.direction));
-
-		if (theta < l.outerCutoff)
-			continue;
-
-		float epsilon = l.cutoff - l.outerCutoff;
-		float intensity = clamp((theta - l.outerCutoff) / epsilon, 0.0, 1.0);
-
-		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation * intensity, lightDir);
-	}
-
-	resoult += skybox * albedo * AO;
-	resoult += texture(mat.emissionTxt, texCoord).rgb;
-
-	resoult = resoult / (resoult + vec3(1.0));
-
-	FragColor.rgb = pow(resoult, vec3(1.0/2.2));
 }

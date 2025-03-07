@@ -53,14 +53,14 @@ int main(){
     shader.setInt("numDirLights", 0);
 
     // Camera
-    Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.15f, 100.0f);
+    Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.1f, 1000.0f);
     cam.setPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 
     // Main loop
     while (!Window.shouldWindowClose()){
         Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
-        cam.cameraMovement(Window, Window.deltaTime(), 1.0f);
+        cam.cameraMovement(Window, Window.deltaTime(), 1.5f);
         cam.cameraRotation(0.05f, mouseX, mouseY);
         cam.applyToShader(shader);
 
