@@ -34,10 +34,14 @@ void Renderer::Camera::setTarget(glm::vec3 Target) {
 
 void Renderer::Camera::cameraMovement(Renderer::Window &Window, float deltaTime, float cameraSpeed) {
     
-    if (glfwGetMouseButton(Window.getGlfwWindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+    if (glfwGetMouseButton(Window.getGlfwWindow(), GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS) {
         mouseDown = true;
-    else
+        glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED); 
+    }
+    else {
         mouseDown = false;
+        glfwSetInputMode(Window.getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_NORMAL); 
+    }
 
     glfwGetCursorPos(Window.getGlfwWindow(), &xpos, &ypos);
 
