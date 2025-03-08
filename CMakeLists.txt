@@ -19,6 +19,7 @@ add_executable("${CMAKE_PROJECT_NAME}" ${SOURCES})
 target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC GLFW_INCLUDE_NONE=1) 
 
 target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC include)
+target_include_directories("${CMAKE_PROJECT_NAME}" PRIVATE include/imgui)
 target_include_directories("${CMAKE_PROJECT_NAME}" PRIVATE vendor/include)
 
 target_link_libraries("${CMAKE_PROJECT_NAME}" glad glfw glm assimp)

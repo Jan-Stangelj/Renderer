@@ -8,11 +8,24 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
 #include <iostream>
-#include <chrono>
 
 int main(){ 
     Renderer::Window Window(1280, 720, "Renderer", true);
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(Window.getGlfwWindow(), true);
+    ImGui_ImplOpenGL3_Init();
 
     Renderer::Shader shader("../src/shaders/basic.vert", "../src/shaders/basic.frag");
     shader.use();
@@ -45,7 +58,8 @@ int main(){
     Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.1f, 1000.0f);
     cam.setPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 
-    shader.setFloat("exposure", 0.8f);
+
+    float exposure = 1.0f;
 
     // Main loop
     while (!Window.shouldWindowClose()){
@@ -55,10 +69,27 @@ int main(){
         cam.cameraRotation(0.075f);
         cam.applyToShader(shader);
 
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::Begin("Settings");
+        ImGui::DragFloat("Exposure", &exposure, 0.01f);
+        ImGui::End();
+
+        shader.setFloat("exposure", exposure);
+
         sponza.draw(shader);
         helmet.draw(shader);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
         Window.swapBuffers();
     }
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     return 0;
 }
