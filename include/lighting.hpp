@@ -14,7 +14,6 @@ namespace Renderer {
           Strength(strength) {}
 
           void Bind(Renderer::Shader &Shader, int index);
-    private:
 
         glm::vec3 Position;
         glm::vec3 Color;
@@ -30,7 +29,6 @@ namespace Renderer {
         Intensity(intensity) {}
 
         void Bind(Renderer::Shader &Shader, int index);
-    private:
 
         glm::vec3 Direction;
         glm::vec3 Color;
@@ -49,8 +47,6 @@ namespace Renderer {
         outerCutoff(outerCutoff) {}
 
         void Bind(Renderer::Shader &Shader, int index);
-
-    private:
 
         glm::vec3 position;
         glm::vec3 color;
