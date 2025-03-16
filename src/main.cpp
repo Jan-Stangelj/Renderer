@@ -74,6 +74,11 @@ int main(){
         ImGui::NewFrame();
 
         ImGui::Begin("Settings");
+
+        std::string frametime = "Frametime: " + std::to_string(Window.deltaTime());
+        std::string fps = "FPS: " + std::to_string((int)floor(1.0f / Window.deltaTime()));
+        ImGui::Text(frametime.c_str());
+        ImGui::Text(fps.c_str());
         ImGui::DragFloat("Exposure", &exposure, 0.01f);
         ImGui::End();
 

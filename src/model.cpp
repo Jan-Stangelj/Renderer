@@ -85,27 +85,29 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
             aiString str;
             mat->GetTexture(aiTextureType_DIFFUSE, 0, &str);
             material->setAlbedoTexture(directory + '/' + str.C_Str());
+
+            if (mat->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION) >= 1) {
+                aiString str;
+                mat->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &str);
+                material->setAOTexture(directory + '/' + str.C_Str());
+            }
+            if (mat->GetTextureCount(aiTextureType_GLTF_METALLIC_ROUGHNESS) >= 1) {
+                aiString str;
+                mat->GetTexture(aiTextureType_GLTF_METALLIC_ROUGHNESS, 0, &str);
+                material->setMetallicRoughnessTexture(directory + '/' + str.C_Str());
+            }
+            if (mat->GetTextureCount(aiTextureType_NORMALS)) {
+                aiString str;
+                mat->GetTexture(aiTextureType_NORMALS, 0, &str);
+                material->setNormalTexture(directory + '/' + str.C_Str());
+            }
+            if (mat->GetTextureCount(aiTextureType_EMISSIVE) >= 1) {
+                aiString str;
+                mat->GetTexture(aiTextureType_EMISSIVE, 0, &str);
+                material->setEmissionTexture(directory + '/' + str.C_Str());
+            }
         }
-        if (mat->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION) >= 1) {
-            aiString str;
-            mat->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &str);
-            material->setAOTexture(directory + '/' + str.C_Str());
-        }
-        if (mat->GetTextureCount(aiTextureType_GLTF_METALLIC_ROUGHNESS) >= 1) {
-            aiString str;
-            mat->GetTexture(aiTextureType_GLTF_METALLIC_ROUGHNESS, 0, &str);
-            material->setMetallicRoughnessTexture(directory + '/' + str.C_Str());
-        }
-        if (mat->GetTextureCount(aiTextureType_NORMALS)) {
-            aiString str;
-            mat->GetTexture(aiTextureType_NORMALS, 0, &str);
-            material->setNormalTexture(directory + '/' + str.C_Str());
-        }
-        if (mat->GetTextureCount(aiTextureType_EMISSIVE) >= 1) {
-            aiString str;
-            mat->GetTexture(aiTextureType_EMISSIVE, 0, &str);
-            material->setEmissionTexture(directory + '/' + str.C_Str());
-        }
+
     }
     
     return Renderer::Mesh(vertices, indices, material);
