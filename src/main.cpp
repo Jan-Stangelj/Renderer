@@ -22,6 +22,8 @@ int main(){
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(Window.getGlfwWindow(), true);
@@ -75,7 +77,7 @@ int main(){
 
         ImGui::Begin("Settings");
 
-        std::string frametime = "Frametime: " + std::to_string(Window.deltaTime());
+        std::string frametime = "Frametime: " + std::to_string(Window.deltaTime()) + "ms";
         std::string fps = "FPS: " + std::to_string((int)floor(1.0f / Window.deltaTime()));
         ImGui::Text(frametime.c_str());
         ImGui::Text(fps.c_str());
@@ -91,6 +93,14 @@ int main(){
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         
         Window.swapBuffers();
+
+        // Update and Render additional Platform Windows
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(Window.getGlfwWindow());
+        }
     }
 
     ImGui_ImplOpenGL3_Shutdown();
