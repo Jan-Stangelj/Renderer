@@ -12,16 +12,14 @@ in mat3 TBN;
 
 struct material {
 	sampler2D albedoTxt;
-	sampler2D aoTxt;
 	sampler2D metallicRoughnessTxt;
 	sampler2D normalTxt;
 	sampler2D emissionTxt;
 
 	vec3 albedo;
-	float AO;
 	vec3 metallicRoughness;
 
-	bool hasAlbedo, hasAO, hasMetallicRoughness;
+	bool hasAlbedo, hasMetallicRoughness;
 };
 
 uniform material mat;
@@ -35,13 +33,12 @@ void main() {
 	normal = normalize(TBN * normal);
 	
     vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).rgb : vec3(mat.albedo);
-    float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
 	float roughness = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).g : mat.metallicRoughness.g;
 	float metallic = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).b : mat.metallicRoughness.b;
 
 	gPosition = fragPos;
 	gNormal = normal;
 	gAlbedo = pow(albedo, vec3(2.2));
-	gPBR = vec3(AO, roughness, metallic);
+	gPBR = vec3(0, roughness, metallic);
 	gEmission = pow(texture(mat.emissionTxt, texCoord).rgb, vec3(2.2));
 }

@@ -45,11 +45,11 @@ int main(){
     helmet.position = glm::vec3(0.0f, 1.0f, 0.0f);
     helmet.rotation = glm::vec3(90.0f, 0.0f, 0.0f);
 
-    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 32.0f);
+    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 16.0f);
     light.Bind(lighting, 0);
-    Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 32.0f);
+    Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
     light2.Bind(lighting, 1);
-    Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 32.0f);
+    Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
     light3.Bind(lighting, 2);
 
     Renderer::SpotLight light4(glm::vec3(0.0f, 4.0f, 1.0f), glm::vec3(1.0f), 16.0f, glm::vec3(0.0f, 0.0f, -1.0f), 15.0f, 60.0f);

@@ -24,6 +24,7 @@ namespace Renderer {
         
       GLuint ID;
       Renderer::Texture gAlbedo, gPosition, gNormal, gPBR, gEmission;
+      GLuint quadVAO, quadVBO;
 
     };
 }

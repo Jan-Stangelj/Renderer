@@ -32,9 +32,9 @@ struct directionalLight {
 	float intensity;
 };
 
-uniform pointLight pointLights[32];
-uniform spotLight spotLights[32];
-uniform directionalLight dirLights[4];
+uniform pointLight pointLights[128];
+uniform spotLight spotLights[128];
+uniform directionalLight dirLights[1];
 
 uniform int numPointLights;
 uniform int numSpotLights;
@@ -61,7 +61,6 @@ void main() {
 	vec3 normal = texture(gNormal, texCoord).rgb;
 	
     vec3 albedo = texture(gAlbedo, texCoord).rgb;
-    float AO = texture(gAlbedo, texCoord).r;
 	float roughness =texture(gPBR, texCoord).g;
 	float metallic = texture(gPBR, texCoord).b;
 
@@ -103,7 +102,7 @@ void main() {
 		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation * intensity, lightDir, fragPos);
 	}
 
-	resoult += skybox * albedo * AO;
+	resoult += skybox * albedo;
 	resoult += texture(gEmission, texCoord).rgb;
 
 	resoult = ACESFitted(resoult * exposure);

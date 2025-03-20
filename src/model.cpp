@@ -85,12 +85,6 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
             aiString str;
             mat->GetTexture(aiTextureType_DIFFUSE, 0, &str);
             material->setAlbedoTexture(directory + '/' + str.C_Str());
-
-            if (mat->GetTextureCount(aiTextureType_AMBIENT_OCCLUSION) >= 1) {
-                aiString str;
-                mat->GetTexture(aiTextureType_AMBIENT_OCCLUSION, 0, &str);
-                material->setAOTexture(directory + '/' + str.C_Str());
-            }
             if (mat->GetTextureCount(aiTextureType_GLTF_METALLIC_ROUGHNESS) >= 1) {
                 aiString str;
                 mat->GetTexture(aiTextureType_GLTF_METALLIC_ROUGHNESS, 0, &str);
