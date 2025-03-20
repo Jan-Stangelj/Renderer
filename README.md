@@ -3,11 +3,10 @@ I develop this in my spare time.\
 ![image](readme_resources/sponza.png)
 
 ## Feature list:
-- Physically based rendering
+- Physically based deferred rendering
 - Model loading
 - Normal and emmision maps
-- HDR rendering with tone mapping (Reinhard)
-- Multiple lights
+- HDR rendering with tone mapping (ACES)
 
 ## Compilation
 
@@ -36,3 +35,4 @@ The renderer will likely use modern OpenGL features like compute shaders, that a
 - [glm](https://github.com/g-truc/glm)
 - [stb](https://github.com/nothings/stb)
 - [assimp](https://github.com/assimp/assimp)
+- [ImGUI](https://github.com/ocornut/imgui)
