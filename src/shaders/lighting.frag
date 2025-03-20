@@ -2,24 +2,12 @@
 out vec4 FragColor;
 
 in vec2 texCoord;
-in vec3 fragPos;
-in mat3 TBN;
 
-
-struct material {
-	sampler2D albedoTxt;
-	sampler2D aoTxt;
-	sampler2D metallicRoughnessTxt;
-	sampler2D normalTxt;
-	sampler2D emissionTxt;
-
-	vec3 albedo;
-	float AO;
-	vec3 metallicRoughness;
-
-	bool hasAlbedo, hasAO, hasMetallicRoughness;
-};
-
+uniform sampler2D gPosition;
+uniform sampler2D gNormal;
+uniform sampler2D gAlbedo;
+uniform sampler2D gPBR;
+uniform sampler2D gEmission;
 
 struct pointLight {
 	vec3 position;
@@ -44,17 +32,16 @@ struct directionalLight {
 	float intensity;
 };
 
-uniform material mat;
-
 uniform pointLight pointLights[32];
 uniform spotLight spotLights[32];
 uniform directionalLight dirLights[4];
-uniform vec3 skybox;
-uniform float exposure;
 
 uniform int numPointLights;
 uniform int numSpotLights;
 uniform int numDirLights;
+
+uniform vec3 skybox;
+uniform float exposure;
 
 uniform vec3 camPos;
 
@@ -64,28 +51,26 @@ float DistributionGGX(vec3 N, vec3 H, float roughness);
 float GeometrySchlickGGX(float NdotV, float roughness);
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness);
 
-vec3 calcLight(vec3 albedo, float roughness, float metallic, vec3 normal, vec3 radiance, vec3 lightDir);
+vec3 calcLight(vec3 albedo, float roughness, float metallic, vec3 normal, vec3 radiance, vec3 lightDir, vec3 fragPos);
 
 vec3 ACESFitted(vec3 color);
 
 void main() {
-	if (texture(mat.albedoTxt, texCoord).w == 0)
-		discard;
-
-	vec3 normal = texture(mat.normalTxt, texCoord).rgb;
-	normal = normal * 2.0 - 1.0;
-	normal = normalize(TBN * normal);
-	
 	vec3 resoult = vec3(0.0f);
-    vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
-    float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
-	float roughness = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).g : mat.metallicRoughness.g;
-	float metallic = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).b : mat.metallicRoughness.b;
+
+	vec3 normal = texture(gNormal, texCoord).rgb;
+	
+    vec3 albedo = texture(gAlbedo, texCoord).rgb;
+    float AO = texture(gAlbedo, texCoord).r;
+	float roughness =texture(gPBR, texCoord).g;
+	float metallic = texture(gPBR, texCoord).b;
+
+	vec3 fragPos = texture(gPosition, texCoord).rgb;
 
 	for (int i = 0; i < numDirLights; i++) {
 		directionalLight l = dirLights[i];
 
-		resoult += calcLight(albedo, roughness, metallic, normal, l.color * l.intensity, -l.direction);
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * l.intensity, -l.direction, fragPos);
 	}
 	for (int i = 0; i < numPointLights; i++) {
 		pointLight l = pointLights[i];
@@ -95,7 +80,7 @@ void main() {
 		if (attenuation < 0.012)
 			continue;
 
-		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, l.position - fragPos);
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, l.position - fragPos, fragPos);
 	}
 	for (int i = 0; i < numSpotLights; i++) {
 		spotLight l = spotLights[i];
@@ -114,11 +99,11 @@ void main() {
 		float epsilon = l.cutoff - l.outerCutoff;
 		float intensity = clamp((theta - l.outerCutoff) / epsilon, 0.0, 1.0);
 
-		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation * intensity, lightDir);
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation * intensity, lightDir, fragPos);
 	}
 
 	resoult += skybox * albedo * AO;
-	resoult += texture(mat.emissionTxt, texCoord).rgb;
+	resoult += texture(gEmission, texCoord).rgb;
 
 	resoult = ACESFitted(resoult * exposure);
 	resoult = pow(resoult, vec3(1.0/2.2));
@@ -162,7 +147,7 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0) {
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
 
-vec3 calcLight(vec3 albedo, float roughness, float metallic, vec3 normal, vec3 radiance, vec3 lightDir) {
+vec3 calcLight(vec3 albedo, float roughness, float metallic, vec3 normal, vec3 radiance, vec3 lightDir, vec3 fragPos) {
 
     vec3 N = normal;
     vec3 V = normalize(camPos - fragPos);

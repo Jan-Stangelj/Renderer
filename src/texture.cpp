@@ -3,9 +3,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#include <iostream>
-#include <unordered_map>
-
 Renderer::Texture::Texture(std::string file, bool linearColorSpace) {
     generate(file, linearColorSpace);
 }
@@ -41,6 +38,14 @@ void Renderer::Texture::generate(std::string file, bool linearColorSpace) {
         std::cout << "Failed to load texture\n";
     }
     stbi_image_free(data);
+}
+
+void Renderer::Texture::generateForFBO(unsigned int width, unsigned int height, GLint internalFormat, GLenum format) {
+    glGenTextures(1, &ID);
+    glBindTexture(GL_TEXTURE_2D, ID);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
 void Renderer::Texture::Bind(unsigned int textureUnit, Renderer::Shader &shader, std::string textureUniform) {
