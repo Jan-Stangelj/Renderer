@@ -45,7 +45,7 @@ int main(){
     helmet.position = glm::vec3(0.0f, 1.0f, 0.0f);
     helmet.rotation = glm::vec3(90.0f, 0.0f, 0.0f);
 
-    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 64.0f);
+    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 32.0f);
     light.Bind(lighting, 0);
     Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 32.0f);
     light2.Bind(lighting, 1);
@@ -56,8 +56,8 @@ int main(){
     light4.Bind(lighting, 0);
 
     lighting.use();
-    lighting.setInt("numPointLights", 1);
-    lighting.setInt("numSpotLights", 0);
+    lighting.setInt("numPointLights", 3);
+    lighting.setInt("numSpotLights", 1);
     lighting.setInt("numDirLights", 0);
 
     // Camera
@@ -72,7 +72,7 @@ int main(){
 
     // Main loop
     while (!Window.shouldWindowClose()){
-        Window.clear(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
 
         cam.cameraMovement(Window, Window.deltaTime(), 1.5f);
         cam.cameraRotation(0.075f);
@@ -89,7 +89,7 @@ int main(){
         lighting.setFloat("exposure", exposure);
 
         deferredBuffer.bindFramebuffer();
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClearColor(pow(0.2f, 2.2), pow(0.3f, 2.2), pow(0.3f, 2.2), 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         sponza.draw(buffer);
         helmet.draw(buffer);

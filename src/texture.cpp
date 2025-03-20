@@ -26,11 +26,9 @@ void Renderer::Texture::generate(std::string file, bool linearColorSpace) {
     //stbi_set_flip_vertically_on_load(true);  
     unsigned char *data = stbi_load(file.c_str(), &width, &height, &colorChannels, 0);
 
-    const GLenum lookup2[] = {0, GL_RED, GL_RG, GL_RGB, GL_RGBA};
-
     if (data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, ((linearColorSpace==1)*GL_RGB)+((linearColorSpace==0&&colorChannels!=4)*GL_SRGB)+((linearColorSpace==0&&colorChannels==4)*GL_SRGB_ALPHA), width, height, 0, lookup2[colorChannels], GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB+colorChannels-3, width, height, 0, GL_RGB+colorChannels-3, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
@@ -43,7 +41,7 @@ void Renderer::Texture::generate(std::string file, bool linearColorSpace) {
 void Renderer::Texture::generateForFBO(unsigned int width, unsigned int height, GLint internalFormat, GLenum format) {
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, NULL);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }

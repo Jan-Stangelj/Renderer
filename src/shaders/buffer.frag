@@ -34,14 +34,14 @@ void main() {
 	normal = normal * 2.0 - 1.0;
 	normal = normalize(TBN * normal);
 	
-    vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).xyz : mat.albedo;
+    vec3 albedo = mat.hasAlbedo ? texture(mat.albedoTxt, texCoord).rgb : vec3(mat.albedo);
     float AO = mat.hasAO ? texture(mat.aoTxt, texCoord).x : mat.AO;
 	float roughness = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).g : mat.metallicRoughness.g;
 	float metallic = mat.hasMetallicRoughness ? texture(mat.metallicRoughnessTxt, texCoord).b : mat.metallicRoughness.b;
 
 	gPosition = fragPos;
 	gNormal = normal;
-	gAlbedo = albedo;
+	gAlbedo = pow(albedo, vec3(2.2));
 	gPBR = vec3(AO, roughness, metallic);
-	gEmission = texture(mat.emissionTxt, texCoord).rgb;
+	gEmission = pow(texture(mat.emissionTxt, texCoord).rgb, vec3(2.2));
 }

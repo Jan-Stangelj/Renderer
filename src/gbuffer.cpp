@@ -14,7 +14,7 @@ Renderer::gBuffer::gBuffer(unsigned int width, unsigned int height) {
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, gNormal.ID, 0);
     
     // - color buffer
-    gAlbedo.generateForFBO(width, height, GL_RGB, GL_RGB);
+    gAlbedo.generateForFBO(width, height, GL_RGBA, GL_RGBA);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, gAlbedo.ID, 0);
 
     // - pbr buffer

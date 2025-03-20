@@ -75,12 +75,13 @@ void main() {
 	for (int i = 0; i < numPointLights; i++) {
 		pointLight l = pointLights[i];
 
-		float distance = length(l.position - fragPos);
+		vec3 lightDir = l.position - fragPos;
+		float distance = length(lightDir);
 		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 0.012)
+		if (attenuation < 5/256 )
 			continue;
 
-		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, l.position - fragPos, fragPos);
+		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, lightDir, fragPos);
 	}
 	for (int i = 0; i < numSpotLights; i++) {
 		spotLight l = spotLights[i];
@@ -88,7 +89,7 @@ void main() {
 		vec3 lightDir = l.position - fragPos;
 		float distance = length(lightDir);
 		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 0.012)
+		if (attenuation < 5/256)
 			continue;
 		
 		float theta = dot(normalize(lightDir), normalize(-l.direction));
@@ -109,6 +110,7 @@ void main() {
 	resoult = pow(resoult, vec3(1.0/2.2));
 
 	FragColor.rgb = resoult;
+
 }
 
 // --------------------------------------------------------------------------------------------------------------------------
