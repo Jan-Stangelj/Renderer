@@ -33,7 +33,7 @@ int main(){
     ImGui_ImplOpenGL3_Init();
 
     Renderer::Shader buffer("../src/shaders/buffer.vert", "../src/shaders/buffer.frag");
-    Renderer::Shader lighting("../src/shaders/lighting.vert", "../src/shaders/lighting.frag");
+    Renderer::Shader lighting("../src/shaders/basicquad.vert", "../src/shaders/lighting.frag");
     lighting.use();
     lighting.setVec3("skybox", glm::vec3(0.2f, 0.2f, 0.3f));
 
@@ -45,11 +45,11 @@ int main(){
     helmet.position = glm::vec3(0.0f, 1.0f, 0.0f);
     helmet.rotation = glm::vec3(90.0f, 0.0f, 0.0f);
 
-    Renderer::PointLight light(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(1.0f), 16.0f);
+    Renderer::PointLight light(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(1.0f), 32.0f);
     light.Bind(lighting, 0);
-    Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
+    Renderer::PointLight light2(glm::vec3(3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 32.0f);
     light2.Bind(lighting, 1);
-    Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 16.0f);
+    Renderer::PointLight light3(glm::vec3(-3.0f, 2.0f, 0.0f), glm::vec3(1.0f), 32.0f);
     light3.Bind(lighting, 2);
 
     Renderer::SpotLight light4(glm::vec3(0.0f, 4.0f, 1.0f), glm::vec3(1.0f), 16.0f, glm::vec3(0.0f, 0.0f, -1.0f), 15.0f, 60.0f);
@@ -64,7 +64,7 @@ int main(){
     Renderer::Camera cam(60.0f, Window.resolution().x/Window.resolution().y, 0.1f, 1000.0f);
     cam.setPosition(glm::vec3(0.0f, 3.0f, 0.0f));
 
-    Renderer::gBuffer deferredBuffer(Window.resolution().x, Window.resolution().y);
+    Renderer::gBuffer deferredBuffer(Window.resolution());
 
 
     float exposure = 1.0f;

@@ -1,4 +1,4 @@
-#version 330 core
+#version 460 core
 out vec4 FragColor;
 
 in vec2 texCoord;
@@ -77,7 +77,7 @@ void main() {
 		vec3 lightDir = l.position - fragPos;
 		float distance = length(lightDir);
 		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 5/256 )
+		if (attenuation < 16.0/256.0)
 			continue;
 
 		resoult += calcLight(albedo, roughness, metallic, normal, l.color * attenuation, lightDir, fragPos);
@@ -88,7 +88,7 @@ void main() {
 		vec3 lightDir = l.position - fragPos;
 		float distance = length(lightDir);
 		float attenuation = l.strenght / pow(distance, distance);
-		if (attenuation < 5/256)
+		if (attenuation < 16.0/256.0)
 			continue;
 		
 		float theta = dot(normalize(lightDir), normalize(-l.direction));

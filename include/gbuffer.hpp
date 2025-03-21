@@ -10,7 +10,7 @@
 namespace Renderer {
     class gBuffer {
     public:
-      gBuffer(unsigned int width, unsigned int height);
+      gBuffer(glm::vec2 resolution);
       ~gBuffer();
 
       void bindFramebuffer();
