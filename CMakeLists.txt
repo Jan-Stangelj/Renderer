@@ -12,18 +12,18 @@ add_subdirectory(vendor/glad)
 add_subdirectory(vendor/glfw)
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/assimp)
+add_subdirectory(vendor/imgui)
 
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS "src/*.cpp")
-file(GLOB_RECURSE VENDORSOURCES CONFIGURE_DEPENDS "vendor/bin/*.cpp")
-add_executable("${CMAKE_PROJECT_NAME}" ${SOURCES} ${VENDORSOURCES})
+add_executable(${CMAKE_PROJECT_NAME} ${SOURCES})
 
-target_compile_definitions("${CMAKE_PROJECT_NAME}" PUBLIC GLFW_INCLUDE_NONE=1) 
+target_compile_definitions(${CMAKE_PROJECT_NAME} PUBLIC GLFW_INCLUDE_NONE=1) 
 
-target_include_directories("${CMAKE_PROJECT_NAME}" PUBLIC include)
-target_include_directories("${CMAKE_PROJECT_NAME}" PRIVATE vendor/include/imgui)
-target_include_directories("${CMAKE_PROJECT_NAME}" PRIVATE vendor/include)
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC include)
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE vendor/include/imgui)
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE vendor/include)
 
-target_link_libraries("${CMAKE_PROJECT_NAME}" glad glfw glm assimp)
+target_link_libraries(${CMAKE_PROJECT_NAME} glad glfw glm assimp imgui)
 
 
 
