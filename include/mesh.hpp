@@ -12,6 +12,7 @@
 
 
 #include <vector>
+#include <memory>
 
 namespace Renderer {
     struct Vertex {
@@ -28,7 +29,7 @@ namespace Renderer {
     public:
         Mesh(const std::vector<Vertex> vertices, 
              const std::vector<unsigned int> indices,
-             Renderer::Material* mat);
+             std::shared_ptr<Renderer::Material> mat);
         ~Mesh() = default;
 
         void draw(Renderer::Shader shader);
@@ -39,11 +40,11 @@ namespace Renderer {
 
     private:
         Renderer::VBO vbo;
-        Renderer::VAO* vao = new Renderer::VAO();
+        std::shared_ptr<Renderer::VAO> vao = std::make_shared<Renderer::VAO>();
         Renderer::EBO ebo;
 
         std::vector<Vertex> vertices;
         std::vector<unsigned int> indices;
-        Renderer::Material* mat;
+        std::shared_ptr<Renderer::Material> mat;
     };
 }

@@ -36,7 +36,7 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
     std::vector<Vertex> vertices;   vertices.reserve(mesh->mNumVertices);
     std::vector<unsigned int> indices;  indices.reserve(mesh->mNumVertices);
 
-    Renderer::Material* material = new Renderer::Material();
+    std::shared_ptr<Renderer::Material> material = std::make_shared<Renderer::Material>();
 
     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
         Renderer::Vertex vertex;

@@ -2,7 +2,7 @@
 
 Renderer::Mesh::Mesh(const std::vector<Vertex> vertices, 
                      const std::vector<unsigned int> indices,
-                     Renderer::Material* mat) 
+                     std::shared_ptr<Renderer::Material> mat) 
                      : vertices(vertices), mat(mat), indices(indices) {
     vao->bind();
     vbo.generate(&vertices[0], vertices.size() * sizeof(Vertex));
