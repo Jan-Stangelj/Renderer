@@ -3,14 +3,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-Renderer::Texture::Texture(std::string file, bool linearColorSpace) {
+Renderer::Texture::Texture(const std::string& file, bool linearColorSpace) {
     generate(file, linearColorSpace);
 }
 Renderer::Texture::~Texture() {
     glDeleteTextures(1, &ID);
 }
 
-void Renderer::Texture::generate(std::string file, bool linearColorSpace) {
+void Renderer::Texture::generate(const std::string& file, bool linearColorSpace) {
     glGenTextures(1, &ID);
     glBindTexture(GL_TEXTURE_2D, ID);
 
@@ -46,7 +46,7 @@ void Renderer::Texture::generateForFBO(unsigned int width, unsigned int height, 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 }
 
-void Renderer::Texture::Bind(unsigned int textureUnit, Renderer::Shader &shader, std::string textureUniform) {
+void Renderer::Texture::Bind(unsigned int textureUnit, Renderer::Shader &shader, const std::string& textureUniform) {
     shader.use();
     shader.setInt(textureUniform.c_str(), textureUnit);
     glActiveTexture(0x84C0 + textureUnit);

@@ -13,7 +13,6 @@ namespace Renderer {
 
         void bind();
         void unbind();
-    private:
 
         GLuint ID;
     };

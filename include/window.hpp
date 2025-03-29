@@ -12,12 +12,12 @@ namespace Renderer{
     class Window{
     public:
 
-        Window(unsigned int Width, unsigned int Height, std::string Title, bool VSync);
+        Window(unsigned int Width, unsigned int Height, const std::string& Title, bool VSync);
         ~Window();
 
         bool shouldWindowClose();
 
-        void clear(glm::vec4 Color);
+        void clear(const glm::vec3& Color);
         void swapBuffers();
 
         GLFWwindow* getGlfwWindow();

@@ -14,16 +14,16 @@ namespace Renderer {
         Camera(float fovY, float aspectRatio, float viewDistanceMin, float viewDistanceMax);
         ~Camera() = default;
 
-        void setPosition(glm::vec3 Position);
-        void addPositionAbsolute(glm::vec3 Position);
-        void addPositionRelative(glm::vec3 Position);
+        void setPosition(const glm::vec3& Position);
+        void addPositionAbsolute(const glm::vec3& Position);
+        void addPositionRelative(const glm::vec3& Position);
 
-        void setTarget(glm::vec3 Target);
+        void setTarget(const glm::vec3& Target);
 
         void cameraMovement(Renderer::Window &Window, float deltaTime, float cameraSpeed);
         void cameraRotation(float mouseSensetivity);
 
-        void applyToShader(Renderer::Shader shader);
+        void applyToShader(Renderer::Shader& shader);
 
         glm::vec3 getPosition() { return position; };
 

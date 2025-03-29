@@ -7,23 +7,23 @@ Renderer::Camera::Camera(float fovY, float aspectRatio, float viewDistanceMin, f
     projection = glm::perspective(glm::radians(fovY), aspectRatio, viewDistanceMin, viewDistanceMax);
 }
 
-void Renderer::Camera::setPosition(glm::vec3 Position) {
+void Renderer::Camera::setPosition(const glm::vec3& Position) {
     position = Position;
     
     view = glm::translate(glm::mat4(1.0f), position);
 }
-void Renderer::Camera::addPositionAbsolute(glm::vec3 Position) {
+void Renderer::Camera::addPositionAbsolute(const glm::vec3& Position) {
     position += Position;
 
     view = glm::translate(view, Position);
 }
-void Renderer::Camera::addPositionRelative(glm::vec3 Position) {
+void Renderer::Camera::addPositionRelative(const glm::vec3& Position) {
     position += (right * Position.x) + (up * Position.y) + (direction * Position.z);
 
     view = glm::translate(view, Position);
 }
 
-void Renderer::Camera::setTarget(glm::vec3 Target) {
+void Renderer::Camera::setTarget(const glm::vec3& Target) {
     target = Target;
     direction = glm::normalize(target - position);
 
@@ -99,7 +99,7 @@ void Renderer::Camera::cameraRotation(float mouseSensetivity) {
     setTarget(position + front);
 }
 
-void Renderer::Camera::applyToShader(Renderer::Shader shader) {
+void Renderer::Camera::applyToShader(Renderer::Shader& shader) {
     shader.setMat4("view", view);
     shader.setMat4("projection", projection);
     shader.setVec3("camPos", position);

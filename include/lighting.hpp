@@ -8,7 +8,7 @@ namespace Renderer {
     class PointLight {
     public:
 
-        PointLight(glm::vec3 position, glm::vec3 color, float strength)
+        PointLight(const glm::vec3& position, const glm::vec3& color, float strength)
         : Position(position), 
           Color(color), 
           Strength(strength) {}
@@ -23,7 +23,7 @@ namespace Renderer {
     class DirectionLight {
     public:
 
-        DirectionLight(glm::vec3 direction, glm::vec3 color, float intensity)
+        DirectionLight(const glm::vec3& direction, const glm::vec3& color, float intensity)
         : Direction(direction), 
         Color(color), 
         Intensity(intensity) {}
@@ -38,7 +38,7 @@ namespace Renderer {
     class SpotLight {
     public:
 
-        SpotLight(glm::vec3 position, glm::vec3 color, float strength, glm::vec3 direction, float cutoff, float outerCutoff)
+        SpotLight(const glm::vec3& position, const glm::vec3& color, float strength, const glm::vec3& direction, float cutoff, float outerCutoff)
         : position(position),
         color(color),
         strength(strength),

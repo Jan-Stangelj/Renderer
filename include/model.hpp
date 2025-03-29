@@ -19,9 +19,9 @@
 namespace Renderer {
     class Model {
     public:
-        Model(std::string path);
+        Model(const std::string& path);
 
-        void draw(Renderer::Shader shader);
+        void draw(Renderer::Shader& shader);
 
         glm::vec3 size = glm::vec3(1.0f);
         glm::vec3 rotation = glm::vec3(0.0f);

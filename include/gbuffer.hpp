@@ -10,13 +10,13 @@
 namespace Renderer {
     class gBuffer {
     public:
-      gBuffer(glm::vec2 resolution);
+      gBuffer(const glm::vec2& resolution);
       ~gBuffer();
 
       void bindFramebuffer();
       void unbindFramebuffer();
 
-      void bindTextures(Renderer::Shader shader);
+      void bindTextures(Renderer::Shader& shader);
 
       void renderQuad();
         

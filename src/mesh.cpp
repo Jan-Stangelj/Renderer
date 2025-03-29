@@ -1,9 +1,9 @@
 #include "mesh.hpp"
 
-Renderer::Mesh::Mesh(const std::vector<Vertex> vertices, 
-                     const std::vector<unsigned int> indices,
+Renderer::Mesh::Mesh(const std::vector<Vertex>& vertices, 
+                     const std::vector<GLuint>& indices,
                      std::shared_ptr<Renderer::Material> mat) 
-                     : vertices(vertices), mat(mat), indices(indices) {
+                     : mat(mat) {
     vao->bind();
     vbo.generate(&vertices[0], vertices.size() * sizeof(Vertex));
     ebo.generate(&indices[0], indices.size() * sizeof(unsigned int));
@@ -14,9 +14,10 @@ Renderer::Mesh::Mesh(const std::vector<Vertex> vertices,
     vao->addAttribute(Renderer::vertexAttribute(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent)));
 
     vao->unbind();
+    numIndices = indices.size();
 }
 
-void Renderer::Mesh::draw(Renderer::Shader shader) {
+void Renderer::Mesh::draw(Renderer::Shader& shader) {
     shader.use();
 
     glm::mat4 trans(1.0f);
@@ -30,5 +31,5 @@ void Renderer::Mesh::draw(Renderer::Shader shader) {
     mat->Bind(shader);
     vao->bind();
     
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
 }

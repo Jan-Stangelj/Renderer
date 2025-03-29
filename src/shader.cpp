@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iostream>
 
-Renderer::Shader::Shader(std::string vertexPath, std::string fragmentPath){
+Renderer::Shader::Shader(const std::string& vertexPath, const std::string& fragmentPath){
 
     // retrieve the vertex/fragment source code from filePath
     std::string vertexCode;

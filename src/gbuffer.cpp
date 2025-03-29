@@ -1,7 +1,7 @@
 #include "gbuffer.hpp"
 
 
-Renderer::gBuffer::gBuffer(glm::vec2 resolution) {
+Renderer::gBuffer::gBuffer(const glm::vec2& resolution) {
     glGenFramebuffers(1, &ID);
     glBindFramebuffer(GL_FRAMEBUFFER, ID);
     
@@ -79,7 +79,7 @@ void Renderer::gBuffer::unbindFramebuffer() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Renderer::gBuffer::bindTextures(Renderer::Shader shader) {
+void Renderer::gBuffer::bindTextures(Renderer::Shader& shader) {
     gAlbedo.Bind(0, shader, "gAlbedo");
     gPosition.Bind(1, shader, "gPosition");
     gNormal.Bind(2, shader, "gNormal");

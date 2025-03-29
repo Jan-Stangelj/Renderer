@@ -52,7 +52,7 @@
     }
 #endif
 
-Renderer::Window::Window(unsigned int Width, unsigned int Height, std::string Title, bool VSync){
+Renderer::Window::Window(unsigned int Width, unsigned int Height, const std::string& Title, bool VSync){
     // window settings
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -109,9 +109,9 @@ bool Renderer::Window::shouldWindowClose(){
     return glfwWindowShouldClose(window);
 }
 
-void Renderer::Window::clear(glm::vec4 Color){
+void Renderer::Window::clear(const glm::vec3& Color){
     glfwSetTime(0);
-    glClearColor(Color.r, Color.g, Color.b, Color.a);
+    glClearColor(Color.r, Color.g, Color.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 void Renderer::Window::swapBuffers(){

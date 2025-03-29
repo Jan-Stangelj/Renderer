@@ -72,7 +72,7 @@ int main(){
 
     // Main loop
     while (!Window.shouldWindowClose()){
-        Window.clear(glm::vec4(0.2f, 0.3f, 0.3f, 1.0f));
+        Window.clear(glm::vec3(0.2f, 0.3f, 0.3f));
 
         cam.cameraMovement(Window, Window.deltaTime(), 1.5f);
         cam.cameraRotation(0.075f);

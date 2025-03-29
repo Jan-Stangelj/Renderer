@@ -1,6 +1,6 @@
 #include "model.hpp"
 
-Renderer::Model::Model(std::string path) {
+Renderer::Model::Model(const std::string& path) {
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | 
                                                    aiProcess_FlipUVs |
@@ -33,8 +33,11 @@ void Renderer::Model::processNode(aiNode *node, const aiScene *scene)
 }
 
 Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) {
-    std::vector<Vertex> vertices;   vertices.reserve(mesh->mNumVertices);
-    std::vector<unsigned int> indices;  indices.reserve(mesh->mNumVertices);
+    std::vector<Vertex> vertices;
+    vertices.reserve(mesh->mNumVertices);
+
+    std::vector<GLuint> indices;
+    indices.reserve(mesh->mNumVertices);
 
     std::shared_ptr<Renderer::Material> material = std::make_shared<Renderer::Material>();
 
@@ -78,8 +81,8 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
         mat->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness);
         mat->Get(AI_MATKEY_METALLIC_FACTOR, metallic);
 
-        material->setAlbedo(glm::vec3(albedo.r, albedo.g, albedo.b));
-        material->setMetallicRoughness(glm::vec3(0.0f, roughness, metallic));
+        material->albedo = glm::vec3(albedo.r, albedo.g, albedo.b);
+        material->metallicRoughness = glm::vec3(0.0f, roughness, metallic);
         
         if (mat->GetTextureCount(aiTextureType_DIFFUSE) >= 1) {
             aiString str;
@@ -107,7 +110,7 @@ Renderer::Mesh Renderer::Model::processMesh(aiMesh* mesh, const aiScene* scene) 
     return Renderer::Mesh(vertices, indices, material);
 }
 
-void Renderer::Model::draw(Renderer::Shader shader) {
+void Renderer::Model::draw(Renderer::Shader& shader) {
     for (unsigned int i = 0; i < meshes.size(); i++) {
         meshes[i].position = position;
         meshes[i].rotation = rotation;

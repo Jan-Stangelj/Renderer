@@ -25,11 +25,11 @@ namespace Renderer {
         VAO();
         ~VAO();
 
-        void addAttribute(const vertexAttribute &Attribute);
+        void addAttribute(const vertexAttribute& Attribute);
 
         void bind();
         void unbind();
-    private:
+
         GLuint ID;
 
         unsigned int attribute_counter = 0;
